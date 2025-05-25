@@ -1,0 +1,11 @@
+### Create product
+POST http://localhost:4000/api/v1/products
+Content-Type: application/json
+
+{
+  "name": "Raymond shirt",
+  "description": "linen fabric shirt",
+  "price": 234.00,
+  "image": "www.google.co.in",
+  "category_name": "Men's Apparels"
+}

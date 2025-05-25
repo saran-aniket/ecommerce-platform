@@ -1,0 +1,4 @@
+### GET products from fakestore
+GET http://localhost:4000/api/v1/products?pageNumber=2&pageSize=8
+
+###

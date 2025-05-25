@@ -1,0 +1,28 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="redis" type="docker-deploy" factoryName="docker-image" server-name="Docker">
+    <deployment type="docker-image">
+      <settings>
+        <option name="imageTag" value="redis:latest" />
+        <option name="containerName" value="redis" />
+        <option name="portBindings">
+          <list>
+            <DockerPortBindingImpl>
+              <option name="containerPort" value="6379" />
+              <option name="hostPort" value="6379" />
+            </DockerPortBindingImpl>
+          </list>
+        </option>
+        <option name="commandLineOptions" value="--network internal" />
+        <option name="volumeBindings">
+          <list>
+            <DockerVolumeBindingImpl>
+              <option name="containerPath" value="/data" />
+              <option name="hostPath" value="C:\Users\ansharan\Documents\Personal\Code\db_volumes\redis" />
+            </DockerVolumeBindingImpl>
+          </list>
+        </option>
+      </settings>
+    </deployment>
+    <method v="2" />
+  </configuration>
+</component>

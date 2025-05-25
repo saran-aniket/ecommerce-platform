@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "fakestoreproduct";
+
+service ProductService{
+  rpc GetFakeStoreProducts(ProductRequest) returns (ProductResponseList);
+}
+
+message ProductRequest{
+  int32 pageNumber = 1;
+  int32 pageSize = 2;
+}
+
+message ProductResponseList{
+  repeated ProductResponse productResponse = 1;
+}
+
+message ProductResponse{
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  float price = 4;
+  string category = 5;
+  string image = 6;
+}
+

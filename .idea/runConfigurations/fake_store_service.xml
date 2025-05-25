@@ -1,0 +1,25 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="fake-store-service" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+    <deployment type="dockerfile">
+      <settings>
+        <option name="imageTag" value="fake-store-service:latest" />
+        <option name="containerName" value="fake-store-service" />
+        <option name="portBindings">
+          <list>
+            <DockerPortBindingImpl>
+              <option name="containerPort" value="4001" />
+              <option name="hostPort" value="4001" />
+            </DockerPortBindingImpl>
+            <DockerPortBindingImpl>
+              <option name="containerPort" value="9000" />
+              <option name="hostPort" value="9000" />
+            </DockerPortBindingImpl>
+          </list>
+        </option>
+        <option name="commandLineOptions" value="--network internal" />
+        <option name="sourceFilePath" value="fake-store-microservice/Dockerfile" />
+      </settings>
+    </deployment>
+    <method v="2" />
+  </configuration>
+</component>
