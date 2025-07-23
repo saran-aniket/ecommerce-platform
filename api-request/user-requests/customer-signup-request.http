@@ -1,0 +1,13 @@
+### GET request to example server
+POST http://localhost:4002/user/customer/signup
+Content-Type: application/json
+
+{
+  "firstName" : "Zoro",
+  "lastName" : "Roronoa",
+  "email" : "zoro@yopmail.com",
+  "password" : "passZoro",
+  "phoneNumber" : "2342342343"
+}
+
+###

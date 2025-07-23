@@ -1,0 +1,13 @@
+### GET request to example server
+POST http://localhost:1110/user/customer/validate-token
+Content-Type: application/json
+Authorization: Bearer alsdkjasprjaspfdolmasd
+
+{
+  "firstName" : "Zoro",
+  "lastName" : "Roronoa",
+  "email" : "zoro@yopmail.com",
+  "password" : "passZoro",
+  "phoneNumber" : "2342342343"
+}
+###

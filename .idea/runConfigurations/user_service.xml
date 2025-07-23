@@ -1,0 +1,69 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="user-service" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+    <deployment type="dockerfile">
+      <settings>
+        <option name="imageTag" value="user-microservice:latest" />
+        <option name="containerName" value="user-service" />
+        <option name="envVars">
+          <list>
+            <DockerEnvVarImpl>
+              <option name="name" value="EUREKA_SERVICE_URL" />
+              <option name="value" value="http://eureka-server:8761/eureka/" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="JWT_EXPIRATION" />
+              <option name="value" value="300000000000" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="JWT_SECRET" />
+              <option name="value" value="Qk55R1pmTW8wMXhPZVNVQVF6WlVhWHZ1a0oyMjNWRFBKYjFPc0o3YTB1dm5WYmZ2VzdvRWhRQVZlaWtuZENnTm5YU2JVYzRabmdqQmg3WVF4N2lRbXNrRnBVWVo4MEJvb1o2RVRPaTBDaU5EMzZqeUlNUUJ4WDFuY3ZCek42eUlIanFNZ2hJZk4wbHNTTFh1UkNSeTd3WFRWa1YyVk52ZW5WdFV0dTV3NkloTGZRZDRFWDRPUEV6T2xxV0VqbG1xbnhFMkFDUlhQczBvcllydWJUc0RZRjJEQktLeWNCU3VTaWN1WWN0eng4UmhzdzJjUDJlUjYzUjBpbmtGRHpPSQ==" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SPRING_DATA_REDIS_HOST" />
+              <option name="value" value="redis" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SPRING_DATA_REDIS_PASSWORD" />
+              <option name="value" value="Saran@12" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SPRING_DATA_REDIS_PORT" />
+              <option name="value" value="6379" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SPRING_DATASOURCE_DRIVER_CLASS_NAME" />
+              <option name="value" value="com.mysql.cj.jdbc.Driver" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SPRING_DATASOURCE_PASSWORD" />
+              <option name="value" value="password" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SPRING_DATASOURCE_URL" />
+              <option name="value" value="jdbc:mysql://ecom-service-db:5000/ecom_db" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SPRING_DATASOURCE_USERNAME" />
+              <option name="value" value="admin_user" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SPRING_JPA_HIBERNATE_DDL_AUTO" />
+              <option name="value" value="update" />
+            </DockerEnvVarImpl>
+          </list>
+        </option>
+        <option name="portBindings">
+          <list>
+            <DockerPortBindingImpl>
+              <option name="containerPort" value="4002" />
+              <option name="hostPort" value="4002" />
+            </DockerPortBindingImpl>
+          </list>
+        </option>
+        <option name="commandLineOptions" value="--network internal" />
+        <option name="sourceFilePath" value="user-microservice/Dockerfile" />
+      </settings>
+    </deployment>
+    <method v="2" />
+  </configuration>
+</component>
