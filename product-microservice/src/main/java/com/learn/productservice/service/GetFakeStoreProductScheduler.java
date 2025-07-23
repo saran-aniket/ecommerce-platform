@@ -29,12 +29,12 @@ public class GetFakeStoreProductScheduler {
 
     @Scheduled(cron = "0 */5 * * * *")
     public void getFakeStoreProducts(){
-        log.info("Fetching products from FakeStoreProductService");
-        List<FakeStoreProductResponse> fakeStoreProductResponseList = productServiceFakeStore.getAllProducts(pageNumber, pageSize);
-        List<ProductRequestDto> productRequestDtoList =
-                fakeStoreProductResponseList.stream().map(ProductMapper::toProductRequestDto).toList();
-        saveAllProduct(productRequestDtoList);
-        pageNumber++;
+        log.info("Not Fetching products from FakeStoreProductService");
+//        List<FakeStoreProductResponse> fakeStoreProductResponseList = productServiceFakeStore.getAllProducts(pageNumber, pageSize);
+//        List<ProductRequestDto> productRequestDtoList =
+//                fakeStoreProductResponseList.stream().map(ProductMapper::toProductRequestDto).toList();
+//        saveAllProduct(productRequestDtoList);
+//        pageNumber++;
     }
 
     public void saveAllProduct(List<ProductRequestDto> productRequestDtoList){

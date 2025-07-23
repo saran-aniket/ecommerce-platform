@@ -15,22 +15,6 @@
               <option name="value" value="9000" />
             </DockerEnvVarImpl>
             <DockerEnvVarImpl>
-              <option name="name" value="SPRING_DATASOURCE_PASSWORD" />
-              <option name="value" value="password" />
-            </DockerEnvVarImpl>
-            <DockerEnvVarImpl>
-              <option name="name" value="SPRING_DATASOURCE_URL" />
-              <option name="value" value="jdbc:mysql://product-service-db:5000/product_db" />
-            </DockerEnvVarImpl>
-            <DockerEnvVarImpl>
-              <option name="name" value="SPRING_DATASOURCE_USERNAME" />
-              <option name="value" value="admin_user" />
-            </DockerEnvVarImpl>
-            <DockerEnvVarImpl>
-              <option name="name" value="SPRING_JPA_HIBERNATE_DDL_AUTO" />
-              <option name="value" value="create" />
-            </DockerEnvVarImpl>
-            <DockerEnvVarImpl>
               <option name="name" value="SPRING_DATA_REDIS_HOST" />
               <option name="value" value="redis" />
             </DockerEnvVarImpl>
@@ -41,6 +25,22 @@
             <DockerEnvVarImpl>
               <option name="name" value="SPRING_DATA_REDIS_PORT" />
               <option name="value" value="6379" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SPRING_DATASOURCE_PASSWORD" />
+              <option name="value" value="password" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SPRING_DATASOURCE_URL" />
+              <option name="value" value="jdbc:mysql://ecom-service-db:5000/ecom_db" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SPRING_DATASOURCE_USERNAME" />
+              <option name="value" value="admin_user" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SPRING_JPA_HIBERNATE_DDL_AUTO" />
+              <option name="value" value="update" />
             </DockerEnvVarImpl>
             <DockerEnvVarImpl>
               <option name="name" value="SPRING_SQL_INIT_MODE" />

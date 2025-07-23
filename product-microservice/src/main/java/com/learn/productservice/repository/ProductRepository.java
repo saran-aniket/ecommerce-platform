@@ -1,9 +1,11 @@
 package com.learn.productservice.repository;
 
+import com.learn.productservice.model.Category;
 import com.learn.productservice.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
