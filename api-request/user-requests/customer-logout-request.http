@@ -1,6 +1,0 @@
-### GET request to example server
-POST http://localhost:4002/user/customer/logout
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NTMxOTIwNDIsImV4cCI6MjA1MzE5MjA0MiwicGhvbmVOdW1iZXIiOiIyMzQyMzQyMzQzIiwicmVnaXN0ZXJlZE9uIjoxNzUzMTg1MjUyMjExLCJhdXRob3JpdGllcyI6WyJST0xFX0NVU1RPTUVSIl0sImZpcnN0TmFtZSI6Ilpvcm8iLCJlbWFpbCI6Inpvcm9AeW9wbWFpbC5jb20iLCJpc0RlbGV0ZWQiOmZhbHNlLCJsYXN0TmFtZSI6IlJvcm9ub2EifQ.aDN0VMMZucq6xTUK2-vpbtcBGInwGJrei4FarTkXfwk
-
-###

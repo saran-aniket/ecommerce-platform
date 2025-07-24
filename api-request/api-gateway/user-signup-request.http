@@ -1,9 +1,0 @@
-### GET request to example server
-POST http://localhost:1110/api/v1/authentication/users/login
-Content-Type: application/json
-
-{
-  "email" : "nami@yopmail.com",
-  "password" : "passNami"
-}
-###

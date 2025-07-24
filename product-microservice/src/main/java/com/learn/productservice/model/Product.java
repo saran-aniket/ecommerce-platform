@@ -6,7 +6,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "products")
-public class Product extends BaseModel{
+public class Product {
+    @Id
+    @GeneratedValue(strategy = jakarta.persistence.GenerationType.AUTO)
+    private UUID id;
     private String name;
     @Column(length = 1000)
     private String description;
@@ -23,6 +26,14 @@ public class Product extends BaseModel{
 
     public void setExternal_id(Long external_id) {
         this.external_id = external_id;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getName() {
