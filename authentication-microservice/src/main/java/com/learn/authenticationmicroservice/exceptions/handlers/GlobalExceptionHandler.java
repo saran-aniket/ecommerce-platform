@@ -63,7 +63,7 @@ public class GlobalExceptionHandler extends Exception {
     }
 
     @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<GenericResponseDto<Void>> handleUnauthorizedExceptions(Exception exception) {
+    public ResponseEntity<GenericResponseDto<Void>> handleUnauthorizedExceptions(UnauthorizedException exception) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(GenericResponseDto.GenericResponseDtoFrom(
                 ResponseStatus.FAILURE, exception.getMessage(), null
         ));

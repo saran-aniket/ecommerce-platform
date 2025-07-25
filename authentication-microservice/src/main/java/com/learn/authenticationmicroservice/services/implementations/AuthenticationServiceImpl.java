@@ -1,5 +1,6 @@
 package com.learn.authenticationmicroservice.services.implementations;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learn.authenticationmicroservice.client.UserServiceClient;
 import com.learn.authenticationmicroservice.dtos.*;
@@ -22,19 +23,25 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public ResponseEntity<GenericResponseDto<UserDto>> signUp(CustomerUserSignupRequestDto customerSignRequestDto) {
+    public GenericResponseDto<CustomerDto> signUp(CustomerUserSignupRequestDto customerSignRequestDto) {
         try {
             String json = objectMapper.writeValueAsString(customerSignRequestDto);
             log.info("DTO as JSON from signup: {}", json);
         } catch (Exception e) {
             log.error("Error serializing DTO to JSON for logging", e);
         }
-
-        return userServiceClient.signUp(customerSignRequestDto);
+        GenericResponseDto<CustomerDto> genericResponseDto = userServiceClient.signUp(customerSignRequestDto);
+        try {
+            String responseJSON = objectMapper.writeValueAsString(genericResponseDto);
+        log.info("Returning GenericResponseDto<CustomerDto>: {}", responseJSON);
+        } catch (JsonProcessingException e) {
+            log.error("Error serializing DTO to JSON for logging", e);
+        }
+        return genericResponseDto;
     }
 
     @Override
-    public ResponseEntity<GenericResponseDto<UserDto>> login(UserLoginRequestDto customerLoginRequestDto) {
+    public GenericResponseDto<CustomerDto> login(UserLoginRequestDto customerLoginRequestDto) {
         try {
             String json = objectMapper.writeValueAsString(customerLoginRequestDto);
             log.info("DTO as JSON from login: {}", json);
@@ -45,12 +52,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public ResponseEntity<GenericResponseDto<Void>> validateToken(String authHeader) {
+    public GenericResponseDto<Void> validateToken(String authHeader) {
         return userServiceClient.validateToken(authHeader);
     }
 
     @Override
-    public ResponseEntity<GenericResponseDto<AuthenticationDto>> getAuthentication(String authHeader) {
+    public GenericResponseDto<AuthenticationDto> getAuthentication(String authHeader) {
         return userServiceClient.getAuthentication(authHeader);
     }
 }

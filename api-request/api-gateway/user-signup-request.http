@@ -1,9 +1,12 @@
 ### GET request to example server
-POST http://localhost:1110/api/v1/authentication/users/login
+POST http://localhost:1110/api/v1/authentication/users/register
 Content-Type: application/json
 
 {
-  "email" : "nami@yopmail.com",
-  "password" : "passNami"
+  "firstName" : "Zoro",
+  "lastName" : "Roronoa",
+  "email" : "zoro@yopmail.com",
+  "password" : "passZoro",
+  "phoneNumber" : "2342342343"
 }
 ###

@@ -43,8 +43,8 @@ public class JwtAuthFilter {
                     if (authHeader == null || !authHeader.startsWith("Bearer ")) {
                         throw new GatewayAuthException("Invalid token");
                     }
-                    ResponseEntity<GenericResponseDto<AuthenticationDto>> response = userServiceClient.getAuthentication(authHeader);
-                    AuthenticationDto authenticationDto = response.getBody().getData();
+                    GenericResponseDto<AuthenticationDto> response = userServiceClient.getAuthentication(authHeader);
+                    AuthenticationDto authenticationDto = response.getData();
                     log.info("Response: {}", authenticationDto);
                 }
                 log.info("Request from api-gateway: {}", request);

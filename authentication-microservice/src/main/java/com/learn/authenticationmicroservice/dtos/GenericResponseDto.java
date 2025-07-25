@@ -1,12 +1,12 @@
 package com.learn.authenticationmicroservice.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Builder
 @AllArgsConstructor
 @Data
+@NoArgsConstructor
+@Getter
 public class GenericResponseDto<T> {
     private ResponseStatus status;
     private String message;

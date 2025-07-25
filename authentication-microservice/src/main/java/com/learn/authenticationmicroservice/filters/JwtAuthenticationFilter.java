@@ -3,6 +3,7 @@ package com.learn.authenticationmicroservice.filters;
 import com.learn.authenticationmicroservice.client.UserServiceClient;
 import com.learn.authenticationmicroservice.dtos.AuthenticationDto;
 import com.learn.authenticationmicroservice.dtos.GenericResponseDto;
+import com.learn.authenticationmicroservice.dtos.ResponseStatus;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -50,9 +51,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (!jwtToken.isEmpty()) {
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 if (authentication == null) {
-                    ResponseEntity<GenericResponseDto<AuthenticationDto>> authenticationResponse = userServiceClient.getAuthentication(jwtToken);
-                    if(authenticationResponse.getStatusCode().is2xxSuccessful() && authenticationResponse.getBody()!= null){
-                        Collection<GrantedAuthority> authorityCollection = authenticationResponse.getBody().getData().getAuthorities().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+                    GenericResponseDto<AuthenticationDto> authenticationResponse = userServiceClient.getAuthentication(jwtToken);
+                    if(authenticationResponse != null && authenticationResponse.getStatus() == ResponseStatus.SUCCESS){
+                        Collection<GrantedAuthority> authorityCollection = authenticationResponse.getData().getAuthorities().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
                         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(jwtToken, null, authorityCollection);
                         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                         log.info("Authentication is set in Auth Service");

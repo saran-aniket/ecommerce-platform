@@ -6,11 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 
 public interface AuthenticationService {
-    ResponseEntity<GenericResponseDto<UserDto>> signUp(CustomerUserSignupRequestDto customerSignRequestDto);
+    GenericResponseDto<CustomerDto> signUp(CustomerUserSignupRequestDto customerSignRequestDto);
 
-    ResponseEntity<GenericResponseDto<UserDto>> login(UserLoginRequestDto customerLoginRequestDto);
+    GenericResponseDto<CustomerDto> login(UserLoginRequestDto customerLoginRequestDto);
 
-    ResponseEntity<GenericResponseDto<Void>> validateToken(String authHeader);
+    GenericResponseDto<Void> validateToken(String authHeader);
 
-    ResponseEntity<GenericResponseDto<AuthenticationDto>> getAuthentication(String authHeader);
+    GenericResponseDto<AuthenticationDto> getAuthentication(String authHeader);
 }
