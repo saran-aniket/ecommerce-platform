@@ -7,7 +7,6 @@ import com.learn.authenticationmicroservice.dtos.*;
 import com.learn.authenticationmicroservice.services.AuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
@@ -33,7 +32,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         GenericResponseDto<CustomerDto> genericResponseDto = userServiceClient.signUp(customerSignRequestDto);
         try {
             String responseJSON = objectMapper.writeValueAsString(genericResponseDto);
-        log.info("Returning GenericResponseDto<CustomerDto>: {}", responseJSON);
+            log.info("Returning GenericResponseDto<CustomerDto>: {}", responseJSON);
         } catch (JsonProcessingException e) {
             log.error("Error serializing DTO to JSON for logging", e);
         }
@@ -51,13 +50,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return userServiceClient.login(customerLoginRequestDto);
     }
 
-    @Override
-    public GenericResponseDto<Void> validateToken(String authHeader) {
-        return userServiceClient.validateToken(authHeader);
-    }
+//    @Override
+//    public GenericResponseDto<Void> validateToken(String authHeader) {
+//        return userServiceClient.validateToken(authHeader);
+//    }
 
     @Override
     public GenericResponseDto<AuthenticationDto> getAuthentication(String authHeader) {
+        log.info("Authenticating user with token");
+        log.info("***** getAuthentication: authHeader: {}", authHeader);
         return userServiceClient.getAuthentication(authHeader);
     }
 }

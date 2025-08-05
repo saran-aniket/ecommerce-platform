@@ -2,17 +2,18 @@ package com.learn.authenticationmicroservice.controllers;
 
 import com.learn.authenticationmicroservice.dtos.*;
 import com.learn.authenticationmicroservice.services.AuthenticationService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/authentication/users")
+@Slf4j
 public class AuthenticationController {
 
+//    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AuthenticationController.class);
     private final AuthenticationService authenticationService;
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AuthenticationController.class);
 
     public AuthenticationController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
@@ -32,8 +33,10 @@ public class AuthenticationController {
         return ResponseEntity.status(HttpStatus.OK).body(authenticationService.signUp(customerSignupRequestDto));
     }
 
-    @PostMapping("/authenticate")
+    @GetMapping("/authenticate")
     public ResponseEntity<GenericResponseDto<AuthenticationDto>> authenticate(@RequestHeader("Authorization") String authHeader) {
+        log.info("***** authenticate: authHeader: {}", authHeader);
+        log.info("Authenticating user with token");
         return ResponseEntity.status(HttpStatus.OK).body(authenticationService.getAuthentication(authHeader));
     }
 

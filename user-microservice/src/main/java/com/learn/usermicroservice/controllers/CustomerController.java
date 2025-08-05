@@ -78,6 +78,7 @@ public class CustomerController {
 
     @GetMapping("/authenticate")
     public ResponseEntity<GenericResponseDto<AuthenticationDto>> getAuthentication(@RequestHeader("Authorization") String authHeader) throws UnauthorizedException {
+        log.info("authHeader: {}", authHeader);
         return ResponseEntity.status(HttpStatus.OK).body(GenericResponseDto.GenericResponseDtoFrom(ResponseStatus.SUCCESS, "", customerService.getAuthentication(authHeader)));
     }
 }

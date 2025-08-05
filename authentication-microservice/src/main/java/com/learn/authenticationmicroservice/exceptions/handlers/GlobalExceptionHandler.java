@@ -68,4 +68,11 @@ public class GlobalExceptionHandler extends Exception {
                 ResponseStatus.FAILURE, exception.getMessage(), null
         ));
     }
+
+    @ExceptionHandler(CustomFeignException.class)
+    public ResponseEntity<GenericResponseDto<Void>> handleFeignExceptions(CustomFeignException exception) {
+        return ResponseEntity.status(HttpStatus.valueOf(Integer.parseInt(exception.getStatus()))).body(GenericResponseDto.GenericResponseDtoFrom(
+                ResponseStatus.FAILURE, exception.getMessage(), null
+        ));
+    }
 }

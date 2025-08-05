@@ -2,13 +2,9 @@ package com.learn.usermicroservice.configs;
 
 import com.learn.usermicroservice.filters.JwtAuthenticationFilter;
 import com.learn.usermicroservice.services.AuthEntryPointJwt;
-import com.learn.usermicroservice.services.CustomUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,13 +25,11 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
-    private final CustomUserDetailService customUserDetailService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthEntryPointJwt unauthorizedHandler;
 
 
-    public SecurityConfiguration(CustomUserDetailService customUserDetailService, JwtAuthenticationFilter jwtAuthenticationFilter, AuthEntryPointJwt unauthorizedHandler) {
-        this.customUserDetailService = customUserDetailService;
+    public SecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter, AuthEntryPointJwt unauthorizedHandler) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.unauthorizedHandler = unauthorizedHandler;
     }
@@ -50,7 +44,6 @@ public class SecurityConfiguration {
                 )
                 .exceptionHandling(errors -> errors.authenticationEntryPoint(unauthorizedHandler))
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authenticationProvider(getAuthenticationProvider())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -65,12 +58,12 @@ public class SecurityConfiguration {
 //        auth.authenticationProvider(getAuthenticationProvider());
 //    }
 
-    @Bean
-    public AuthenticationProvider getAuthenticationProvider() {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(customUserDetailService);
-        daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder());
-        return daoAuthenticationProvider;
-    }
+//    @Bean
+//    public AuthenticationProvider getAuthenticationProvider() {
+//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(customUserDetailService);
+//        daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder());
+//        return daoAuthenticationProvider;
+//    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {

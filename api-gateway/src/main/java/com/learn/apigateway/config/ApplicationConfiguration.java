@@ -30,40 +30,25 @@ public class ApplicationConfiguration {
         RouterFunction<ServerResponse> route = GatewayRouterFunctions.route("auth_route")
                 .route(RequestPredicates.POST("/api/v1/authentication/users/**"),
                         HandlerFunctions.http())
+                .route(RequestPredicates.GET("/api/v1/authentication/users/**"),
+                        HandlerFunctions.http())
                 .before(jwtAuthFilter.validateToken(PUBLIC_URLS))
-                .before((request) -> {
-                    log.info("Request from api-gateway: {}", request);
-                    return request;
-                })
                 .before(BeforeFilterFunctions.uri("http://auth-service:4003"))
                 .onError(Exception.class,
                         (throwable, serverRequest) -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).body(throwable.getMessage()))
                 .onError(RuntimeException.class,
                         (throwable, serverRequest) -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).body(throwable.getMessage()))
-                .build();
-//                .and(
-//                        GatewayRouterFunctions.route("user_route")
-//                                .route(RequestPredicates.POST("/user/customer/**"), HandlerFunctions.http())
-//                                .before(jwtAuthFilter.validateToken(PUBLIC_URLS))
-//                                .onError(AuthenticationException.class,
-//                                        (error, request) -> ServerResponse.badRequest().body(error.getMessage()))
-//                                .before(BeforeFilterFunctions.uri("http://user-service:4002"))
-//                                .build()
-//                );
+                .build()
+                .and(
+                        GatewayRouterFunctions.route("user_route")
+                                .route(RequestPredicates.POST("/user/customer/**"), HandlerFunctions.http())
+                                .before(jwtAuthFilter.validateToken(PUBLIC_URLS))
+                                .onError(AuthenticationException.class,
+                                        (error, request) -> ServerResponse.badRequest().body(error.getMessage()))
+                                .before(BeforeFilterFunctions.uri("http://user-service:4002"))
+                                .build()
+                );
         log.info("Auth Service Router Function: {}", route);
         return route;
     }
-
-//    @Bean
-//    public RouterFunction<ServerResponse> userServiceRouter(JwtAuthFilter jwtAuthFilter) {
-//        RouterFunction<ServerResponse> route = GatewayRouterFunctions.route("user_route")
-//                .route(RequestPredicates.path("/user/customer/**"), HandlerFunctions.http())
-//                .before(jwtAuthFilter.validateToken(PUBLIC_URLS))
-//                .onError(AuthenticationException.class,
-//                        (error, request) -> ServerResponse.badRequest().body(error.getMessage()))
-//                .before(BeforeFilterFunctions.uri("http://user-service:4002"))
-//                .build();
-//        log.info("User Service Router Function: {}", route);
-//        return route;
-//    }
 }

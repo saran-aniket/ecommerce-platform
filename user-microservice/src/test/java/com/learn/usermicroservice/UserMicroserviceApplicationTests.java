@@ -14,7 +14,7 @@ import java.util.List;
 
 @SpringBootTest
 //@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
-@ActiveProfiles("default")
+@ActiveProfiles("test")
 @TestPropertySource(properties = {"jwt.secret=secret", "jwt.expiration=3600"})
 class UserMicroserviceApplicationTests {
 
@@ -26,17 +26,17 @@ class UserMicroserviceApplicationTests {
     void contextLoads() {
     }
 
-    @Test
-    @Order(1)
-    void loadUserRole(){
-        List<UserRole> userRole = new ArrayList<>(2);
-        userRole.add(new UserRole());
-        userRole.add(new UserRole());
-        userRole.get(0).setName("ROLE_CUSTOMER");
-        userRole.get(1).setName("ROLE_SELLER");
-        userRoleRepository.saveAll(userRole);
-
-    }
+//    @Test
+//    @Order(1)
+//    void loadUserRole(){
+//        List<UserRole> userRole = new ArrayList<>(2);
+//        userRole.add(new UserRole());
+//        userRole.add(new UserRole());
+//        userRole.get(0).setName("ROLE_CUSTOMER");
+//        userRole.get(1).setName("ROLE_SELLER");
+//        userRoleRepository.saveAll(userRole);
+//
+//    }
 //
 //    @Test
 //    @Order(2)

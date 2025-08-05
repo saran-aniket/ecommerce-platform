@@ -1,8 +1,6 @@
 package com.learn.usermicroservice.filters;
 
-import com.learn.usermicroservice.services.CustomUserDetailService;
 import com.learn.usermicroservice.services.implementation.JwtServiceImpl;
-import com.learn.usermicroservice.services.implementation.TokenBlackListServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,28 +15,32 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtServiceImpl jwtService;
-    private final CustomUserDetailService customUserDetailService;
     private final HandlerExceptionResolver handlerExceptionResolver;
-    private final TokenBlackListServiceImpl tokenBlackListService;
 
-    public JwtAuthenticationFilter(JwtServiceImpl jwtService, CustomUserDetailService customUserDetailService, HandlerExceptionResolver handlerExceptionResolver, TokenBlackListServiceImpl tokenBlackListService) {
+    private static final List<String> PUBLIC_URLS = List.of("/user/customer/login",
+            "/user/customer/signup",
+            "/user/customer/authenticate"
+    );
+
+    public JwtAuthenticationFilter(JwtServiceImpl jwtService, HandlerExceptionResolver handlerExceptionResolver) {
         this.jwtService = jwtService;
-        this.customUserDetailService = customUserDetailService;
         this.handlerExceptionResolver = handlerExceptionResolver;
-        this.tokenBlackListService = tokenBlackListService;
     }
 
     @Override
     public void doFilterInternal(@NonNull HttpServletRequest request,
                                  @NonNull HttpServletResponse response,
                                  @NonNull FilterChain filterChain) throws ServletException, IOException {
-        if(request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")){
+        String path = request.getServletPath();
+        if (PUBLIC_URLS.contains(path) || (request.getHeader("Authorization") == null || !request.getHeader(
+                "Authorization").startsWith("Bearer "))) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -50,7 +52,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(jwtService.getAuthentication(jwtToken));
                     log.info("Authentication is set in User Service");
                 }
-            }else{
+            } else {
                 throw new AuthenticationCredentialsNotFoundException("Invalid Credentials");
             }
             filterChain.doFilter(request, response);

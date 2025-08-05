@@ -6,9 +6,7 @@ import com.learn.apigateway.dtos.AuthenticationDto;
 import com.learn.apigateway.dtos.GenericResponseDto;
 import com.learn.apigateway.exceptions.GatewayAuthException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.function.ServerRequest;
 
@@ -29,12 +27,13 @@ public class JwtAuthFilter {
 
     public Function<ServerRequest, ServerRequest> validateToken(List<String> publicUrls) {
         return (request) -> {
-            try{
+            try {
                 ServerRequest serverRequest = ServerRequest
                         .from(request)
                         .build();
                 String path = serverRequest.path();
                 if (!publicUrls.contains(path)) {
+                    log.info("Validating token in  api gateway");
                     HttpHeaders requestHeaders = serverRequest.headers().asHttpHeaders();
                     if (!requestHeaders.containsKey("Authorization")) {
                         throw new GatewayAuthException("No Authorization Header");
@@ -48,11 +47,13 @@ public class JwtAuthFilter {
                     log.info("Response: {}", authenticationDto);
                 }
                 log.info("Request from api-gateway: {}", request);
-                log.info("Server Request from api-gateway: {}", serverRequest.toString());
-//                log.info("Request body: {}", request.body(String.class));
+                log.info("Server Request from api-gateway: {}", serverRequest);
+                HttpHeaders requestHeaders = serverRequest.headers().asHttpHeaders();
+                String authHeader = requestHeaders.getFirst(HttpHeaders.AUTHORIZATION);
+                log.info("Token : {}", authHeader);
                 return request;
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 log.error("Exception: {}", e.getMessage(), e);
                 throw new GatewayAuthException(e.getMessage());
             }

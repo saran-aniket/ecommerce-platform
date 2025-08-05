@@ -14,9 +14,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @Component
@@ -83,11 +85,11 @@ public class JwtServiceImpl implements JwtService {
     public UsernamePasswordAuthenticationToken getAuthentication(String token) {
         Claims claims = extractAllClaims(token);
         Collection<GrantedAuthority> authorities;
-        if(claims.get("authorities") != null){
+        if (claims.get("authorities") != null) {
             authorities =
-                    ((List<String>)claims.get("authorities")).stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-            log.info("Authorities: {}", authorities.toString());
-        }else{
+                    ((List<String>) claims.get("authorities")).stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+            log.info("Authorities: {}", authorities);
+        } else {
             throw new JwtException("Authorities are not present in the token");
         }
         return new UsernamePasswordAuthenticationToken(token, null, authorities);

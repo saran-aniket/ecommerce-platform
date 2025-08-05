@@ -16,11 +16,11 @@ public class TokenBlackListServiceImpl implements TokenBlackListService {
         this.jwtService = jwtService;
     }
 
-    public void addTokenToBlackList(String token){
+    public void addTokenToBlackList(String token) {
         redisTemplate.opsForValue().set("blacklist:" + token, "blacklisted", jwtService.extractExpiration(token).getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
     }
 
-    public Boolean isTokenBlackListed(String token){
+    public Boolean isTokenBlackListed(String token) {
         return redisTemplate.hasKey("blacklist:" + token);
     }
 }

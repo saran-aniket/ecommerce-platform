@@ -3,6 +3,7 @@ package com.learn.authenticationmicroservice.dtos;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -10,7 +11,7 @@ import java.util.List;
 public class AuthenticationDto {
     private String email;
     private Boolean isDeleted;
-    private String registeredOn;
+    private Date registeredOn;
     private String firstName;
     private String lastName;
     private String phoneNumber;

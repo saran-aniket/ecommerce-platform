@@ -3,10 +3,12 @@ package com.learn.apigateway.dtos;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Builder
 @AllArgsConstructor
 @Data
+@NoArgsConstructor
 public class GenericResponseDto<T> {
     private ResponseStatus status;
     private String message;
