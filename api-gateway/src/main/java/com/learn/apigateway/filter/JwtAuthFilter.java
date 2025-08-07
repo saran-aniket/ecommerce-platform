@@ -26,11 +26,8 @@ public class JwtAuthFilter {
     }
 
     public Function<ServerRequest, ServerRequest> validateToken(List<String> publicUrls) {
-        return (request) -> {
+        return (serverRequest) -> {
             try {
-                ServerRequest serverRequest = ServerRequest
-                        .from(request)
-                        .build();
                 String path = serverRequest.path();
                 if (!publicUrls.contains(path)) {
                     log.info("Validating token in  api gateway");
@@ -46,12 +43,11 @@ public class JwtAuthFilter {
                     AuthenticationDto authenticationDto = response.getData();
                     log.info("Response: {}", authenticationDto);
                 }
-                log.info("Request from api-gateway: {}", request);
-                log.info("Server Request from api-gateway: {}", serverRequest);
+                log.info("Request from api-gateway: {}", serverRequest);
                 HttpHeaders requestHeaders = serverRequest.headers().asHttpHeaders();
                 String authHeader = requestHeaders.getFirst(HttpHeaders.AUTHORIZATION);
                 log.info("Token : {}", authHeader);
-                return request;
+                return serverRequest;
 
             } catch (Exception e) {
                 log.error("Exception: {}", e.getMessage(), e);
