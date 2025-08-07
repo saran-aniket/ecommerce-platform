@@ -60,7 +60,7 @@ class AuthEntryPointJwtImplTest {
 
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> body = mapper.readValue(outputStream.toByteArray(),
-                new TypeReference<Map<String, Object>>() {
+                new TypeReference<>() {
         });
 
         assertEquals(401, body.get("status"));

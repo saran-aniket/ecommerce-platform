@@ -26,7 +26,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void signUp_returnsGenericResponseDto() throws Exception {
+    void signUp_returnsGenericResponseDto() {
         CustomerUserSignupRequestDto signupRequest = new CustomerUserSignupRequestDto();
         GenericResponseDto<CustomerDto> expectedResponse = new GenericResponseDto<>();
 
@@ -39,7 +39,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void login_returnsGenericResponseDto() throws Exception {
+    void login_returnsGenericResponseDto() {
         UserLoginRequestDto loginRequest = new UserLoginRequestDto();
         GenericResponseDto<CustomerDto> expectedResponse = new GenericResponseDto<>();
 

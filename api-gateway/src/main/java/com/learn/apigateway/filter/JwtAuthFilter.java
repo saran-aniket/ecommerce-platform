@@ -1,6 +1,5 @@
 package com.learn.apigateway.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learn.apigateway.client.UserServiceClient;
 import com.learn.apigateway.dtos.AuthenticationDto;
 import com.learn.apigateway.dtos.GenericResponseDto;
@@ -17,7 +16,6 @@ import java.util.function.Function;
 @Component
 public class JwtAuthFilter {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
     private final UserServiceClient userServiceClient;
 
 
