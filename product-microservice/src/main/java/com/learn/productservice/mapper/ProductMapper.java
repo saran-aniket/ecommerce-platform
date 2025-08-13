@@ -42,25 +42,25 @@ public class ProductMapper {
         return fakeStoreProductResponse;
     }
 
-    public static ProductRequestDto toProductRequestDto(ProductResponseDto productResponseDto) {
-        ProductRequestDto productRequestDto = new ProductRequestDto();
-        productRequestDto.setName(productResponseDto.getName());
-        productRequestDto.setDescription(productResponseDto.getDescription());
-        productRequestDto.setPrice(productResponseDto.getPrice());
-        productRequestDto.setImage(productResponseDto.getImage());
-        productRequestDto.setCategory_name(productResponseDto.getCategory_name());
-        productRequestDto.setExternal_id(productResponseDto.getExternal_id());
-        return productRequestDto;
-    }
+//    public static ProductRequestDto toProductRequestDto(ProductResponseDto productResponseDto) {
+//        ProductRequestDto productRequestDto = new ProductRequestDto();
+//        productRequestDto.setName(productResponseDto.getName());
+//        productRequestDto.setDescription(productResponseDto.getDescription());
+//        productRequestDto.setPrice(productResponseDto.getPrice());
+//        productRequestDto.setImage(productResponseDto.getImage());
+//        productRequestDto.setCategory_name(productResponseDto.getCategory_name());
+//        productRequestDto.setExternal_id(productResponseDto.getExternal_id());
+//        return productRequestDto;
+//    }
 
-    public static ProductRequestDto toProductRequestDto(FakeStoreProductResponse fakeStoreProductResponse) {
-        ProductRequestDto productRequestDto = new ProductRequestDto();
-        productRequestDto.setName(fakeStoreProductResponse.getTitle());
-        productRequestDto.setDescription(fakeStoreProductResponse.getDescription());
-        productRequestDto.setPrice(fakeStoreProductResponse.getPrice());
-        productRequestDto.setImage(fakeStoreProductResponse.getImage());
-        productRequestDto.setCategory_name(fakeStoreProductResponse.getCategory());
-        productRequestDto.setExternal_id(fakeStoreProductResponse.getId());
-        return productRequestDto;
-    }
+//    public static ProductRequestDto toProductRequestDto(FakeStoreProductResponse fakeStoreProductResponse) {
+//        ProductRequestDto productRequestDto = new ProductRequestDto();
+//        productRequestDto.setName(fakeStoreProductResponse.getTitle());
+//        productRequestDto.setDescription(fakeStoreProductResponse.getDescription());
+//        productRequestDto.setPrice(fakeStoreProductResponse.getPrice());
+//        productRequestDto.setImage(fakeStoreProductResponse.getImage());
+//        productRequestDto.setCategory_name(fakeStoreProductResponse.getCategory());
+//        productRequestDto.setExternal_id(fakeStoreProductResponse.getId());
+//        return productRequestDto;
+//    }
 }

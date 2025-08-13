@@ -8,7 +8,6 @@ import org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.servlet.function.RequestPredicates;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
@@ -48,14 +47,14 @@ public class ApplicationConfiguration {
                                 .before(BeforeFilterFunctions.uri("http://user-service:4002"))
                                 .build()
                 ).and(
-                GatewayRouterFunctions.route("product_route")
-                        .route(RequestPredicates.path("/api/v1/products/**"), HandlerFunctions.http())
-                        .before(jwtAuthFilter.validateToken(PUBLIC_URLS))
-                        .onError(AuthenticationException.class,
-                                (error, request) -> ServerResponse.badRequest().body(error.getMessage()))
-                        .before(BeforeFilterFunctions.uri("http://product-service:4000"))
-                        .build()
-        );
+                        GatewayRouterFunctions.route("product_route")
+                                .route(RequestPredicates.path("/api/v1/products/**"), HandlerFunctions.http())
+                                .before(jwtAuthFilter.validateToken(PUBLIC_URLS))
+                                .onError(AuthenticationException.class,
+                                        (error, request) -> ServerResponse.badRequest().body(error.getMessage()))
+                                .before(BeforeFilterFunctions.uri("http://product-service:4000"))
+                                .build()
+                );
         log.info("Auth Service Router Function: {}", route);
         return route;
     }

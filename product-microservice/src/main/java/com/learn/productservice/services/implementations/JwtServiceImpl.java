@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -25,11 +24,8 @@ public class JwtServiceImpl implements JwtService {
 
     private final String SECRET;
 
-    private final Long EXPIRATION;
-
-    public JwtServiceImpl(@Value("${jwt.secret}") String secret, @Value("${jwt.expiration}") Long expiration) {
+    public JwtServiceImpl(@Value("${jwt.secret}") String secret) {
         this.SECRET = secret;
-        this.EXPIRATION = expiration;
     }
 
     public Claims extractAllClaims(String token) {
