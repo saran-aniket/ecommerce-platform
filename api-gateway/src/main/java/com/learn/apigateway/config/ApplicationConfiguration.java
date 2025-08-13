@@ -47,7 +47,15 @@ public class ApplicationConfiguration {
                                         (error, request) -> ServerResponse.badRequest().body(error.getMessage()))
                                 .before(BeforeFilterFunctions.uri("http://user-service:4002"))
                                 .build()
-                );
+                ).and(
+                GatewayRouterFunctions.route("product_route")
+                        .route(RequestPredicates.path("/api/v1/products/**"), HandlerFunctions.http())
+                        .before(jwtAuthFilter.validateToken(PUBLIC_URLS))
+                        .onError(AuthenticationException.class,
+                                (error, request) -> ServerResponse.badRequest().body(error.getMessage()))
+                        .before(BeforeFilterFunctions.uri("http://product-service:4000"))
+                        .build()
+        );
         log.info("Auth Service Router Function: {}", route);
         return route;
     }

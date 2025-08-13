@@ -1,4 +1,4 @@
-package com.learn.productservice.exception;
+package com.learn.productservice.exceptions;
 
 public class ProductNotFoundException extends RuntimeException {
     public ProductNotFoundException(String message) {

@@ -1,8 +1,6 @@
-package com.learn.productservice.service;
+package com.learn.productservice.services.implementations;
 
-import com.learn.productservice.dto.FakeStoreProductResponse;
-import com.learn.productservice.dto.ProductRequestDto;
-import com.learn.productservice.dto.ProductResponseDto;
+import com.learn.productservice.dtos.FakeStoreProductResponse;
 import com.learn.productservice.grpc.FakeStoreProductServiceClient;
 import com.learn.productservice.mapper.ProductMapper;
 import fakestoreproduct.ProductResponse;

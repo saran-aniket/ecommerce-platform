@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 
@@ -33,6 +34,9 @@ class JwtAuthenticationFilterTest {
     private HttpServletResponse mockResponse;
     @Mock
     private FilterChain mockFilterChain;
+
+    @Mock
+    private HandlerExceptionResolver mockHandlerExceptionResolver;
 
     @InjectMocks
     private JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -74,6 +78,7 @@ class JwtAuthenticationFilterTest {
         String jwtToken = "invalid.jwt.token";
         when(mockRequest.getHeader("Authorization")).thenReturn("Bearer " + jwtToken);
         when(jwtService.getAuthentication(jwtToken)).thenThrow(JwtException.class);
+
 
         jwtAuthenticationFilter.doFilterInternal(mockRequest, mockResponse, mockFilterChain);
 

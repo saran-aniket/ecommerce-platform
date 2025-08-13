@@ -1,15 +1,14 @@
 package com.learn.productservice.mapper;
 
-import com.learn.productservice.dto.FakeStoreProductResponse;
-import com.learn.productservice.dto.ProductRequestDto;
-import com.learn.productservice.dto.ProductResponseDto;
+import com.learn.productservice.dtos.FakeStoreProductResponse;
+import com.learn.productservice.dtos.ProductRequestDto;
+import com.learn.productservice.dtos.ProductResponseDto;
 import com.learn.productservice.model.Category;
 import com.learn.productservice.model.Product;
 import fakestoreproduct.ProductResponse;
-import fakestoreproduct.ProductResponseList;
 
 public class ProductMapper {
-    public static Product toProduct(ProductRequestDto productRequestDto){
+    public static Product toProduct(ProductRequestDto productRequestDto) {
         Product product = new Product();
         product.setName(productRequestDto.getName());
         product.setDescription(productRequestDto.getDescription());
@@ -22,7 +21,7 @@ public class ProductMapper {
         return product;
     }
 
-    public static ProductResponseDto toProductResponseDto(Product product){
+    public static ProductResponseDto toProductResponseDto(Product product) {
         ProductResponseDto productResponseDto = new ProductResponseDto();
         productResponseDto.setName(product.getName());
         productResponseDto.setDescription(product.getDescription());
@@ -32,7 +31,7 @@ public class ProductMapper {
         return productResponseDto;
     }
 
-    public static FakeStoreProductResponse toFakeStoreProductResponseDto(ProductResponse productResponse){
+    public static FakeStoreProductResponse toFakeStoreProductResponseDto(ProductResponse productResponse) {
         FakeStoreProductResponse fakeStoreProductResponse = new FakeStoreProductResponse();
         fakeStoreProductResponse.setTitle(productResponse.getName());
         fakeStoreProductResponse.setDescription(productResponse.getDescription());
@@ -43,7 +42,7 @@ public class ProductMapper {
         return fakeStoreProductResponse;
     }
 
-    public static ProductRequestDto toProductRequestDto(ProductResponseDto productResponseDto){
+    public static ProductRequestDto toProductRequestDto(ProductResponseDto productResponseDto) {
         ProductRequestDto productRequestDto = new ProductRequestDto();
         productRequestDto.setName(productResponseDto.getName());
         productRequestDto.setDescription(productResponseDto.getDescription());
@@ -54,7 +53,7 @@ public class ProductMapper {
         return productRequestDto;
     }
 
-    public static ProductRequestDto toProductRequestDto(FakeStoreProductResponse fakeStoreProductResponse){
+    public static ProductRequestDto toProductRequestDto(FakeStoreProductResponse fakeStoreProductResponse) {
         ProductRequestDto productRequestDto = new ProductRequestDto();
         productRequestDto.setName(fakeStoreProductResponse.getTitle());
         productRequestDto.setDescription(fakeStoreProductResponse.getDescription());

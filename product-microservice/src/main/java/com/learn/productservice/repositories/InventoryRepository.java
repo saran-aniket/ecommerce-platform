@@ -1,4 +1,4 @@
-package com.learn.productservice.repository;
+package com.learn.productservice.repositories;
 
 import com.learn.productservice.model.Inventory;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,4 +1,4 @@
-package com.learn.productservice.dto;
+package com.learn.productservice.dtos;
 
 public class FakeStoreProductResponse {
     private long id;

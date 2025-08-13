@@ -1,39 +1,40 @@
-package com.learn.productservice.service;
+package com.learn.productservice.services.implementations;
 
-import com.learn.productservice.dto.ProductRequestDto;
-import com.learn.productservice.dto.ProductResponseDto;
-import com.learn.productservice.exception.ProductNotFoundException;
+import com.learn.productservice.dtos.ProductRequestDto;
+import com.learn.productservice.dtos.ProductResponseDto;
+import com.learn.productservice.exceptions.ProductNotFoundException;
 import com.learn.productservice.mapper.ProductMapper;
 import com.learn.productservice.model.Category;
 import com.learn.productservice.model.Inventory;
 import com.learn.productservice.model.Product;
 import com.learn.productservice.model.Seller;
-import com.learn.productservice.repository.InventoryRepository;
-import com.learn.productservice.repository.SellerRepository;
+import com.learn.productservice.repositories.InventoryRepository;
+import com.learn.productservice.repositories.SellerRepository;
+import com.learn.productservice.services.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import com.learn.productservice.repository.CategoryRepository;
-import com.learn.productservice.repository.ProductRepository;
+import com.learn.productservice.repositories.CategoryRepository;
+import com.learn.productservice.repositories.ProductRepository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
-@Service(value = "productServiceMySql")
-public class ProductServiceMySql{
-    private static final Logger log = LoggerFactory.getLogger(ProductServiceMySql.class);
+@Service(value = "productServiceWithDb")
+public class ProductServiceWithDB implements ProductService {
+    private static final Logger log = LoggerFactory.getLogger(ProductServiceWithDB.class);
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final SellerRepository sellerRepository;
     private final InventoryRepository inventoryRepository;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public ProductServiceMySql(ProductRepository productRepository, CategoryRepository categoryRepository,
-                               RedisTemplate<String, Object> redisTemplate, InventoryRepository inventoryRepository,
-                               SellerRepository sellerRepository) {
+    public ProductServiceWithDB(ProductRepository productRepository, CategoryRepository categoryRepository,
+                                RedisTemplate<String, Object> redisTemplate, InventoryRepository inventoryRepository,
+                                SellerRepository sellerRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.sellerRepository = sellerRepository;
@@ -42,6 +43,7 @@ public class ProductServiceMySql{
     }
 
     public ProductResponseDto saveProduct(ProductRequestDto productRequestDto){
+        log.info("Creating product");
         Product product = ProductMapper.toProduct(productRequestDto);
         Optional<Category> getCategory = categoryRepository.findByNameIgnoreCase(productRequestDto.getCategory_name());
         Category category;
@@ -56,6 +58,7 @@ public class ProductServiceMySql{
         Product createdProduct = productRepository.save(product);
         Inventory inventory = createInventoryWithRandomSeller(createdProduct);
         inventoryRepository.save(inventory);
+        log.info("Inventory created for product {}", createdProduct.getName());
         return ProductMapper.toProductResponseDto(createdProduct);
     }
 
