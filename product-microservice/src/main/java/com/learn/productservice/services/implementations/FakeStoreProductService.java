@@ -1,14 +1,6 @@
 package com.learn.productservice.services.implementations;
 
-import com.learn.productservice.dtos.FakeStoreProductResponse;
-import com.learn.productservice.grpc.FakeStoreProductServiceClient;
-import com.learn.productservice.mapper.ProductMapper;
-import fakestoreproduct.ProductResponse;
-import fakestoreproduct.ProductResponseList;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service(value = "fakeStoreProductService")
 public class FakeStoreProductService {

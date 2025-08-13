@@ -31,16 +31,16 @@ public class ProductMapper {
         return productResponseDto;
     }
 
-    public static FakeStoreProductResponse toFakeStoreProductResponseDto(ProductResponse productResponse) {
-        FakeStoreProductResponse fakeStoreProductResponse = new FakeStoreProductResponse();
-        fakeStoreProductResponse.setTitle(productResponse.getName());
-        fakeStoreProductResponse.setDescription(productResponse.getDescription());
-        fakeStoreProductResponse.setPrice(productResponse.getPrice());
-        fakeStoreProductResponse.setImage(productResponse.getImage());
-        fakeStoreProductResponse.setCategory(productResponse.getCategory());
-        fakeStoreProductResponse.setId(productResponse.getId());
-        return fakeStoreProductResponse;
-    }
+//    public static FakeStoreProductResponse toFakeStoreProductResponseDto(ProductResponse productResponse) {
+//        FakeStoreProductResponse fakeStoreProductResponse = new FakeStoreProductResponse();
+//        fakeStoreProductResponse.setTitle(productResponse.getName());
+//        fakeStoreProductResponse.setDescription(productResponse.getDescription());
+//        fakeStoreProductResponse.setPrice(productResponse.getPrice());
+//        fakeStoreProductResponse.setImage(productResponse.getImage());
+//        fakeStoreProductResponse.setCategory(productResponse.getCategory());
+//        fakeStoreProductResponse.setId(productResponse.getId());
+//        return fakeStoreProductResponse;
+//    }
 
 //    public static ProductRequestDto toProductRequestDto(ProductResponseDto productResponseDto) {
 //        ProductRequestDto productRequestDto = new ProductRequestDto();
