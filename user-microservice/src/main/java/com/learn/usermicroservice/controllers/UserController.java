@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("api/v1/user")
+@RequestMapping("/api/v1/user")
 public class UserController {
     private final UserService userService;
     private final ModelMapper modelMapper;
@@ -85,4 +85,13 @@ public class UserController {
         userService.deleteUser(userDeleteRequestDto.getEmail(), roleType);
         return ResponseEntity.ok().body(GenericResponseDto.GenericResponseDtoFrom(ResponseStatus.SUCCESS, "", null));
     }
+
+    @GetMapping("/profile")
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('SELLER')")
+    public ResponseEntity<GenericResponseDto<GetUserResponseDto>> getUserProfileById(@RequestParam("roleType") String roleType,
+                                                                                     @RequestParam("userId") String userId) {
+        return ResponseEntity.ok().body(GenericResponseDto.GenericResponseDtoFrom(ResponseStatus.SUCCESS, "",
+                GetUserResponseDto.from(userService.getUserByIdAndRoleType(userId, roleType))));
+    }
+
 }

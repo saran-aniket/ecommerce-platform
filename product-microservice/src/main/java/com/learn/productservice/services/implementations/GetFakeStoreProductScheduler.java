@@ -32,8 +32,8 @@ public class GetFakeStoreProductScheduler {
 //        pageNumber++;
     }
 
-    public void saveAllProduct(List<ProductRequestDto> productRequestDtoList){
-        log.info("Saving products to database");
-        productServiceMysql.saveAllProducts(productRequestDtoList);
-    }
+//    public void saveAllProduct(List<ProductRequestDto> productRequestDtoList){
+//        log.info("Saving products to database");
+//        productServiceMysql.saveAllProducts(productRequestDtoList);
+//    }
 }

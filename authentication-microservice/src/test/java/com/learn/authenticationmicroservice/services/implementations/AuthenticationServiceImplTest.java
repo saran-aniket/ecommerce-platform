@@ -21,34 +21,30 @@ class AuthenticationServiceImplTest {
     @InjectMocks
     private AuthenticationServiceImpl authenticationServiceImpl;
 
-    @BeforeEach
-    void setUp() {
-    }
-
     @Test
     void signUp_returnsGenericResponseDto() {
-        CustomerUserSignupRequestDto signupRequest = new CustomerUserSignupRequestDto();
-        GenericResponseDto<CustomerDto> expectedResponse = new GenericResponseDto<>();
+        UserSignupRequestDto signupRequest = new UserSignupRequestDto();
+        GenericResponseDto<UserDto> expectedResponse = new GenericResponseDto<>();
 
-        when(userServiceClient.signUp(signupRequest)).thenReturn(expectedResponse);
+        when(userServiceClient.signUp("CUSTOMER", signupRequest)).thenReturn(expectedResponse);
 
-        GenericResponseDto<CustomerDto> result = authenticationServiceImpl.signUp(signupRequest);
+        GenericResponseDto<UserDto> result = authenticationServiceImpl.signUp("CUSTOMER", signupRequest);
 
         assertSame(expectedResponse, result);
-        verify(userServiceClient, times(1)).signUp(signupRequest);
+        verify(userServiceClient, times(1)).signUp("CUSTOMER", signupRequest);
     }
 
     @Test
     void login_returnsGenericResponseDto() {
         UserLoginRequestDto loginRequest = new UserLoginRequestDto();
-        GenericResponseDto<CustomerDto> expectedResponse = new GenericResponseDto<>();
+        GenericResponseDto<UserDto> expectedResponse = new GenericResponseDto<>();
 
-        when(userServiceClient.login(loginRequest)).thenReturn(expectedResponse);
+        when(userServiceClient.login("CUSTOMER", loginRequest)).thenReturn(expectedResponse);
 
-        GenericResponseDto<CustomerDto> result = authenticationServiceImpl.login(loginRequest);
+        GenericResponseDto<UserDto> result = authenticationServiceImpl.login("CUSTOMER", loginRequest);
 
         assertSame(expectedResponse, result);
-        verify(userServiceClient, times(1)).login(loginRequest);
+        verify(userServiceClient, times(1)).login("CUSTOMER", loginRequest);
     }
 
     @Test

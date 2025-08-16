@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service("sellerUserProfileService")
 public class SellerUserProfileServiceImpl implements UserProfileService {
@@ -53,6 +54,15 @@ public class SellerUserProfileServiceImpl implements UserProfileService {
         Optional<Seller> optionalSeller = sellerRepository.findSellerByEmail(email);
         if (optionalSeller.isEmpty()) {
             throw new SellerNotFoundException("Seller not found for email");
+        }
+        return optionalSeller.get();
+    }
+
+    @Override
+    public ApplicationUser getUserProfileByUserId(String id) {
+        Optional<Seller> optionalSeller = sellerRepository.getSellerById(UUID.fromString(id));
+        if (optionalSeller.isEmpty()) {
+            throw new SellerNotFoundException("Seller not found for id " + id);
         }
         return optionalSeller.get();
     }

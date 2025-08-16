@@ -11,4 +11,6 @@ public interface UserProfileService {
 
     ApplicationUser getUserProfileByApplicationUser(String email);
 
+    ApplicationUser getUserProfileByUserId(String id);
+
 }

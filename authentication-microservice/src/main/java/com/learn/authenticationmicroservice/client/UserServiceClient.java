@@ -4,27 +4,25 @@ import com.learn.authenticationmicroservice.configs.CustomFeignClientConfigurati
 import com.learn.authenticationmicroservice.dtos.*;
 import com.learn.authenticationmicroservice.exceptions.UnauthorizedException;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "user-service", url = "http://user-service:4002", path = "/user/customer", configuration = CustomFeignClientConfiguration.class)
+@FeignClient(name = "user-service", url = "http://user-service:4002", path = "/api/v1/user", configuration = CustomFeignClientConfiguration.class)
 public interface UserServiceClient {
-    @PostMapping("/signup")
-    GenericResponseDto<CustomerDto> signUp(@RequestBody CustomerUserSignupRequestDto customerSignRequestDto);
+    @PostMapping("/auth/signup")
+    GenericResponseDto<UserDto> signUp(@RequestParam("roleType") String roleType,
+                                       @RequestBody UserSignupRequestDto userSignupRequestDto);
 
 
-    @PostMapping("/login")
-    GenericResponseDto<CustomerDto> login(@RequestBody UserLoginRequestDto customerLoginRequestDto);
+    @PostMapping("/auth/login")
+    GenericResponseDto<UserDto> login(@RequestParam("roleType") String roleType,
+                                      @RequestBody UserLoginRequestDto userLoginRequestDto);
 
-//    @PostMapping("/logout")
-//    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
-//    GenericResponseDto<Void>> logout(@RequestHeader("Authorization") String authHeader);
+    @PostMapping("/auth/logout")
+    GenericResponseDto<Void> logout(@RequestHeader("Authorization") String authHeader);
 
-    @PostMapping("/validate-token")
+    @PostMapping("/auth/validate-toke")
     GenericResponseDto<Void> validateToken(@RequestHeader("Authorization") String authHeader);
 
-    @GetMapping("/authenticate")
+    @GetMapping("/auth")
     GenericResponseDto<AuthenticationDto> getAuthentication(@RequestHeader("Authorization") String authHeader) throws UnauthorizedException;
 }

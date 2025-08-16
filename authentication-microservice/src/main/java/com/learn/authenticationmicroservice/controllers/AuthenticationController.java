@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class AuthenticationController {
 
-//    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AuthenticationController.class);
+    //    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AuthenticationController.class);
     private final AuthenticationService authenticationService;
 
     public AuthenticationController(AuthenticationService authenticationService) {
@@ -20,17 +20,19 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<GenericResponseDto<CustomerDto>> login(@RequestBody UserLoginRequestDto userLoginRequestDto) {
-        ResponseEntity<GenericResponseDto<CustomerDto>> responseEntity =
-                ResponseEntity.status(HttpStatus.OK).body(authenticationService.login(userLoginRequestDto));
+    public ResponseEntity<GenericResponseDto<UserDto>> login(@RequestParam("roleType") String roleType,
+                                                             @RequestBody UserLoginRequestDto userLoginRequestDto) {
+        ResponseEntity<GenericResponseDto<UserDto>> responseEntity =
+                ResponseEntity.status(HttpStatus.OK).body(authenticationService.login(roleType, userLoginRequestDto));
         log.info("Returning GenericResponseDto<UserDto>: {}", responseEntity);
         return responseEntity;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<GenericResponseDto<CustomerDto>> register(@RequestBody CustomerUserSignupRequestDto customerSignupRequestDto) {
-        log.info("***** register: customerSignupRequestDto: {}", customerSignupRequestDto);
-        return ResponseEntity.status(HttpStatus.OK).body(authenticationService.signUp(customerSignupRequestDto));
+    public ResponseEntity<GenericResponseDto<UserDto>> register(@RequestParam("roleType") String roleType,
+                                                                @RequestBody UserSignupRequestDto userSignupRequestDto) {
+        log.info("***** register: customerSignupRequestDto: {}", userSignupRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(authenticationService.signUp(roleType, userSignupRequestDto));
     }
 
     @GetMapping("/authenticate")

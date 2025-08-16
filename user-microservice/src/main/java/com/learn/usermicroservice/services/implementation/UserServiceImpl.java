@@ -130,4 +130,9 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    public ApplicationUser getUserByIdAndRoleType(String id, String roleType) {
+        userProfileFactory.setUserRoleType(roleType);
+        UserProfileService userProfileService = userProfileServiceMap.get(userProfileFactory.getUserProfileServiceBeanName());
+        return userProfileService.getUserProfileByUserId(id);
+    }
 }

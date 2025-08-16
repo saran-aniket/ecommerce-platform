@@ -22,14 +22,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public GenericResponseDto<CustomerDto> signUp(CustomerUserSignupRequestDto customerSignRequestDto) {
+    public GenericResponseDto<UserDto> signUp(String roleType, UserSignupRequestDto userSignupRequestDto) {
         try {
-            String json = objectMapper.writeValueAsString(customerSignRequestDto);
+            String json = objectMapper.writeValueAsString(userSignupRequestDto);
             log.info("DTO as JSON from signup: {}", json);
         } catch (Exception e) {
             log.error("Error serializing DTO to JSON for logging", e);
         }
-        GenericResponseDto<CustomerDto> genericResponseDto = userServiceClient.signUp(customerSignRequestDto);
+        GenericResponseDto<UserDto> genericResponseDto = userServiceClient.signUp(roleType, userSignupRequestDto);
         try {
             String responseJSON = objectMapper.writeValueAsString(genericResponseDto);
             log.info("Returning GenericResponseDto<CustomerDto>: {}", responseJSON);
@@ -40,14 +40,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public GenericResponseDto<CustomerDto> login(UserLoginRequestDto customerLoginRequestDto) {
+    public GenericResponseDto<UserDto> login(String roleType, UserLoginRequestDto userLoginRequestDto) {
         try {
-            String json = objectMapper.writeValueAsString(customerLoginRequestDto);
+            String json = objectMapper.writeValueAsString(userLoginRequestDto);
             log.info("DTO as JSON from login: {}", json);
         } catch (Exception e) {
             log.error("Error serializing DTO to JSON for logging", e);
         }
-        return userServiceClient.login(customerLoginRequestDto);
+        return userServiceClient.login(roleType, userLoginRequestDto);
     }
 
 //    @Override

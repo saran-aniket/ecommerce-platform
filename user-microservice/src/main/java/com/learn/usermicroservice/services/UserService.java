@@ -15,6 +15,8 @@ public interface UserService {
 
     ApplicationUser getUserByEmail(String email);
 
+    ApplicationUser getUserByIdAndRoleType(String id, String roleType);
+
     List<ApplicationUser> getAllUsers();
 
 }

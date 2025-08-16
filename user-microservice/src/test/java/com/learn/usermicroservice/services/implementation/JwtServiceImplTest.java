@@ -24,7 +24,7 @@ class JwtServiceImplTest {
         jwtServiceImpl = new JwtServiceImpl(SECRET, EXPIRATION);
         testClaims = new HashMap<>();
         testClaims.put("sub", "testuser");
-        testClaims.put("authorities", Arrays.asList("CUSTOMER", "ROLE_ADMIN"));
+        testClaims.put("authorities", Arrays.asList("CUSTOMER", "ADMIN"));
         validToken = jwtServiceImpl.generateToken(testClaims);
     }
 
@@ -39,7 +39,7 @@ class JwtServiceImplTest {
     void extractAllClaims_shouldReturnClaims() {
         Claims claims = jwtServiceImpl.extractAllClaims(validToken);
         assertEquals("testuser", claims.get("sub"));
-        assertEquals(Arrays.asList("CUSTOMER", "ROLE_ADMIN"), claims.get("authorities"));
+        assertEquals(Arrays.asList("CUSTOMER", "ADMIN"), claims.get("authorities"));
     }
 
     @Test
@@ -61,7 +61,7 @@ class JwtServiceImplTest {
         String token = jwtServiceImpl.generateToken(claimsMap);
         Claims claims = jwtServiceImpl.extractAllClaims(token);
         assertEquals("testuser", claims.get("sub"));
-        assertEquals(Arrays.asList("CUSTOMER", "ROLE_ADMIN"), claims.get("authorities"));
+        assertEquals(Arrays.asList("CUSTOMER", "ADMIN"), claims.get("authorities"));
     }
 
     @Test
@@ -72,7 +72,7 @@ class JwtServiceImplTest {
         Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
         assertNotNull(authorities);
         assertTrue(authorities.stream().anyMatch(a -> a.getAuthority().equals("CUSTOMER")));
-        assertTrue(authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")));
+        assertTrue(authorities.stream().anyMatch(a -> a.getAuthority().equals("ADMIN")));
     }
 
     @Test

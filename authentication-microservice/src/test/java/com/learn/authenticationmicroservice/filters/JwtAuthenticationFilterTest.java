@@ -70,7 +70,7 @@ class JwtAuthenticationFilterTest {
         when(mockRequest.getHeader("Authorization")).thenReturn("Bearer " + token);
 
         AuthenticationDto authDto = new AuthenticationDto();
-        authDto.setAuthorities(List.of("ROLE_USER", "ROLE_ADMIN"));
+        authDto.setAuthorities(List.of("CUSTOMER", "ADMIN"));
         GenericResponseDto<AuthenticationDto> responseDto = new GenericResponseDto<>();
         responseDto.setStatus(ResponseStatus.SUCCESS);
         responseDto.setData(authDto);
@@ -83,7 +83,7 @@ class JwtAuthenticationFilterTest {
         assertNotNull(authentication);
         assertEquals(token, authentication.getPrincipal());
         assertTrue(authentication.getAuthorities().stream()
-                .anyMatch(a -> "ROLE_USER".equals(a.getAuthority())));
+                .anyMatch(a -> "CUSTOMER".equals(a.getAuthority())));
         verify(mockFilterChain).doFilter(mockRequest, mockResponse);
     }
 
