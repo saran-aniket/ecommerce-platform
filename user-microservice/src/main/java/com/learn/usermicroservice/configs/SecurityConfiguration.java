@@ -39,7 +39,7 @@ public class SecurityConfiguration {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/user/customer/**").permitAll()
+                        auth.requestMatchers("api/v1/user/auth/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(errors -> errors.authenticationEntryPoint(unauthorizedHandler))
@@ -53,17 +53,6 @@ public class SecurityConfiguration {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
-//    protected void getAuthenticationProvider(AuthenticationManagerBuilder auth){
-//        auth.authenticationProvider(getAuthenticationProvider());
-//    }
-
-//    @Bean
-//    public AuthenticationProvider getAuthenticationProvider() {
-//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(customUserDetailService);
-//        daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder());
-//        return daoAuthenticationProvider;
-//    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {

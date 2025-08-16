@@ -10,7 +10,7 @@ import java.util.List;
 
 public class TestDataSetup {
 
-    public static ApplicationUser getSingleApplicationUser(){
+    public static ApplicationUser getSingleApplicationUser() {
         ApplicationUser applicationUser = new ApplicationUser();
         applicationUser.setEmail("testEmail.com");
         applicationUser.setPassword("password");
@@ -34,23 +34,22 @@ public class TestDataSetup {
 //        return applicationUserList;
 //    }
 
-    public static List<UserRole> getCustomerUserRole(){
+    public static List<UserRole> getCustomerUserRole() {
         List<UserRole> userRoleList = new ArrayList<>();
         UserRole userRole = new UserRole();
-        userRole.setName("ROLE_CUSTOMER");
+        userRole.setName("CUSTOMER");
         userRoleList.add(userRole);
         return userRoleList;
     }
 
 
-    public static Customer getSingleCustomer(){
+    public static Customer getSingleCustomer() {
         ApplicationUser applicationUser = getSingleApplicationUser();
 
         Customer customer = new Customer();
         customer.setFirstName("firstNameTest");
         customer.setLastName("lastNameTest");
         customer.setPhoneNumber("1234567890");
-        customer.setApplicationUser(applicationUser);
 
         return customer;
     }

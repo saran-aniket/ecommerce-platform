@@ -30,10 +30,10 @@ class UserRoleRepositoryTest {
 
     @Test
     void findUserRoleByName_Success() {
-        Mockito.when(userRoleRepository.findUserRoleByName("ROLE_CUSTOMER")).thenReturn(Optional.ofNullable(userRole.getFirst()));
+        Mockito.when(userRoleRepository.findUserRoleByName("CUSTOMER")).thenReturn(Optional.ofNullable(userRole.getFirst()));
 
-        Optional<UserRole> userRole1 = userRoleRepository.findUserRoleByName("ROLE_CUSTOMER");
-        Mockito.verify(userRoleRepository).findUserRoleByName("ROLE_CUSTOMER");
+        Optional<UserRole> userRole1 = userRoleRepository.findUserRoleByName("CUSTOMER");
+        Mockito.verify(userRoleRepository).findUserRoleByName("CUSTOMER");
 
         assertTrue(userRole1.isPresent());
         assertEquals(userRole.getFirst().getName(), userRole1.get().getName());
@@ -41,10 +41,10 @@ class UserRoleRepositoryTest {
 
     @Test
     void findUserRoleByName_Failure() {
-        Mockito.when(userRoleRepository.findUserRoleByName("ROLE_CUSTOMER")).thenReturn(Optional.empty());
+        Mockito.when(userRoleRepository.findUserRoleByName("CUSTOMER")).thenReturn(Optional.empty());
 
-        Optional<UserRole> userRole1 = userRoleRepository.findUserRoleByName("ROLE_CUSTOMER");
-        Mockito.verify(userRoleRepository).findUserRoleByName("ROLE_CUSTOMER");
+        Optional<UserRole> userRole1 = userRoleRepository.findUserRoleByName("CUSTOMER");
+        Mockito.verify(userRoleRepository).findUserRoleByName("CUSTOMER");
 
         assertTrue(userRole1.isEmpty());
     }

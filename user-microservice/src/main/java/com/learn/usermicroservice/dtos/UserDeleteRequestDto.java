@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CustomerLogoutRequestDto {
+public class UserDeleteRequestDto {
     private String email;
 }

@@ -1,16 +1,11 @@
 package com.learn.usermicroservice;
 
-import com.learn.usermicroservice.models.entities.UserRole;
 import com.learn.usermicroservice.repositories.UserRoleRepository;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootTest
 //@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
@@ -32,8 +27,8 @@ class UserMicroserviceApplicationTests {
 //        List<UserRole> userRole = new ArrayList<>(2);
 //        userRole.add(new UserRole());
 //        userRole.add(new UserRole());
-//        userRole.get(0).setName("ROLE_CUSTOMER");
-//        userRole.get(1).setName("ROLE_SELLER");
+//        userRole.get(0).setName("CUSTOMER");
+//        userRole.get(1).setName("SELLER");
 //        userRoleRepository.saveAll(userRole);
 //
 //    }
@@ -41,7 +36,7 @@ class UserMicroserviceApplicationTests {
 //    @Test
 //    @Order(2)
 //    void testJwt(){
-//        UserRole userRole = userRoleRepository.findUserRoleByName("ROLE_CUSTOMER").get();
+//        UserRole userRole = userRoleRepository.findUserRoleByName("CUSTOMER").get();
 //        ApplicationUser applicationUser = new ApplicationUser();
 //        applicationUser.setUsername("test@yopmail.com");
 //        applicationUser.setUserRoles(List.of(userRole));

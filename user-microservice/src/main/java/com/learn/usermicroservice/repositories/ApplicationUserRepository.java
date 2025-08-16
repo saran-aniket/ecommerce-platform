@@ -14,4 +14,6 @@ public interface ApplicationUserRepository extends JpaRepository<ApplicationUser
     Optional<ApplicationUser> findApplicationUserByEmailAndUserRoles(String email, List<UserRole> userRoles);
 
     Optional<ApplicationUser> findApplicationUserByEmail(String email);
+
+    List<ApplicationUser> findAllByIsActiveTrue();
 }

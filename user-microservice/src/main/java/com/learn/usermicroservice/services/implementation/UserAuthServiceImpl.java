@@ -1,0 +1,90 @@
+package com.learn.usermicroservice.services.implementation;
+
+import com.learn.usermicroservice.dtos.AuthenticationDto;
+import com.learn.usermicroservice.exceptions.InvalidCredentialException;
+import com.learn.usermicroservice.exceptions.UnauthorizedException;
+import com.learn.usermicroservice.factories.UserProfileFactory;
+import com.learn.usermicroservice.models.Token;
+import com.learn.usermicroservice.models.entities.ApplicationUser;
+import com.learn.usermicroservice.models.entities.UserRole;
+import com.learn.usermicroservice.repositories.ApplicationUserRepository;
+import com.learn.usermicroservice.services.TokenBlackListService;
+import com.learn.usermicroservice.services.UserAuthService;
+import com.learn.usermicroservice.services.UserRoleService;
+import io.jsonwebtoken.Claims;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+@Slf4j
+public class UserAuthServiceImpl implements UserAuthService {
+
+    private final JwtServiceImpl jwtService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ApplicationUserRepository applicationUserRepository;
+    private final TokenBlackListService tokenBlackListService;
+    private final UserProfileFactory userProfileFactory;
+    private final UserRoleService userRoleService;
+
+    public UserAuthServiceImpl(JwtServiceImpl jwtService, BCryptPasswordEncoder bCryptPasswordEncoder, ApplicationUserRepository applicationUserRepository, TokenBlackListService tokenBlackListService, UserProfileFactory userProfileFactory, UserRoleService userRoleService) {
+        this.jwtService = jwtService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.applicationUserRepository = applicationUserRepository;
+        this.tokenBlackListService = tokenBlackListService;
+        this.userProfileFactory = userProfileFactory;
+        this.userRoleService = userRoleService;
+    }
+
+    @Override
+    public Token login(String email, String password, String roleType) throws InvalidCredentialException {
+        //check and assign user role type
+        userProfileFactory.setUserRoleType(roleType);
+        UserRole userRole = userRoleService.getUserRoleByName(String.valueOf(userProfileFactory.getUserRoleType()));
+
+        //get application user with email
+        Optional<ApplicationUser> optionalApplicationUser =
+                applicationUserRepository.findApplicationUserByEmail(email);
+        if (optionalApplicationUser.isEmpty() || !optionalApplicationUser.get().getUserRoles().contains(userRole)) {
+            throw new InvalidCredentialException("Invalid Credentials");
+        }
+        ApplicationUser applicationUser = optionalApplicationUser.get();
+        if (!bCryptPasswordEncoder.matches(password, applicationUser.getPassword())) {
+            throw new InvalidCredentialException("Wrong Password");
+        }
+
+        Token token = new Token();
+        String compactTokenString = jwtService.generateToken(applicationUser.getClaims());
+        token.setAccessToken(compactTokenString);
+        token.setExpiresAt(jwtService.extractExpiration(compactTokenString).getTime());
+        return token;
+    }
+
+    @Override
+    public void logout(String token) {
+        tokenBlackListService.addTokenToBlackList(token);
+    }
+
+    @Override
+    public void validateToken(String token) {
+        jwtService.validateToken(token);
+    }
+
+    @Override
+    public AuthenticationDto getAuthentication(String authorizationHeader) {
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            throw new UnauthorizedException("No access token can be found");
+        }
+        String jwtToken = authorizationHeader.substring(7);
+        if (tokenBlackListService.isTokenBlackListed(jwtToken)) {
+            throw new AuthenticationCredentialsNotFoundException("Invalid Credentials");
+        }
+        jwtService.validateToken(jwtToken);
+        Claims claims = jwtService.extractAllClaims(jwtToken);
+        log.info("Token Claims: {}", claims.toString());
+        return AuthenticationDto.from(claims);
+    }
+}
