@@ -7,6 +7,7 @@ import com.learn.usermicroservice.models.Token;
 import com.learn.usermicroservice.models.entities.ApplicationUser;
 import com.learn.usermicroservice.services.UserAuthService;
 import com.learn.usermicroservice.services.UserService;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -60,12 +61,14 @@ public class UserController {
 
 
     @PostMapping("/auth/validate-token")
+    @Hidden
     public ResponseEntity<GenericResponseDto<Void>> validateToken(@RequestHeader("Authorization") String authHeader) {
         userAuthService.validateToken(authHeader.replace("Bearer ", ""));
         return ResponseEntity.status(HttpStatus.OK).body(GenericResponseDto.GenericResponseDtoFrom(ResponseStatus.SUCCESS, "", null));
     }
 
     @GetMapping("/auth")
+    @Hidden
     public ResponseEntity<GenericResponseDto<AuthenticationDto>> getAuthentication(@RequestHeader("Authorization") String authHeader) throws UnauthorizedException {
         log.info("authHeader: {}", authHeader);
         return ResponseEntity.status(HttpStatus.OK).body(GenericResponseDto.GenericResponseDtoFrom(ResponseStatus.SUCCESS, "", userAuthService.getAuthentication(authHeader)));
@@ -88,6 +91,7 @@ public class UserController {
 
     @GetMapping("/profile")
     @PreAuthorize("hasRole('CUSTOMER') or hasRole('SELLER')")
+    @Hidden
     public ResponseEntity<GenericResponseDto<GetUserResponseDto>> getUserProfileById(@RequestParam("roleType") String roleType,
                                                                                      @RequestParam("userId") String userId) {
         return ResponseEntity.ok().body(GenericResponseDto.GenericResponseDtoFrom(ResponseStatus.SUCCESS, "",

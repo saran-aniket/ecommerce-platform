@@ -2,6 +2,7 @@ package com.learn.authenticationmicroservice.controllers;
 
 import com.learn.authenticationmicroservice.dtos.*;
 import com.learn.authenticationmicroservice.services.AuthenticationService;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/authenticate")
+    @Hidden
     public ResponseEntity<GenericResponseDto<AuthenticationDto>> authenticate(@RequestHeader("Authorization") String authHeader) {
         log.info("***** authenticate: authHeader: {}", authHeader);
         log.info("Authenticating user with token");

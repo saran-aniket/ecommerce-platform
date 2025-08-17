@@ -25,7 +25,7 @@ public class ApplicationConfiguration {
     );
 
     @Bean
-    public RouterFunction<ServerResponse> authServiceRouter(JwtAuthFilter jwtAuthFilter) {
+    public RouterFunction<ServerResponse> serviceRouter(JwtAuthFilter jwtAuthFilter) {
         RouterFunction<ServerResponse> route = GatewayRouterFunctions.route("auth_route")
                 .route(RequestPredicates.POST("/api/v1/authentication/users/**"),
                         HandlerFunctions.http())
@@ -40,7 +40,7 @@ public class ApplicationConfiguration {
                 .build()
                 .and(
                         GatewayRouterFunctions.route("user_route")
-                                .route(RequestPredicates.POST("/user/customer/**"), HandlerFunctions.http())
+                                .route(RequestPredicates.POST("/api/v1/user/**"), HandlerFunctions.http())
                                 .before(jwtAuthFilter.validateToken(PUBLIC_URLS))
                                 .onError(AuthenticationException.class,
                                         (error, request) -> ServerResponse.badRequest().body(error.getMessage()))
@@ -56,6 +56,51 @@ public class ApplicationConfiguration {
                                 .build()
                 );
         log.info("Auth Service Router Function: {}", route);
+        return route;
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> openApiRouter() {
+        RouterFunction<ServerResponse> route = GatewayRouterFunctions.route("auth_service_openapi")
+                .route(RequestPredicates.path("/auth-service/v3/api-docs/**")
+                                .or(RequestPredicates.path("/auth-service/swagger-ui/**")),
+                        HandlerFunctions.http())
+                .before(BeforeFilterFunctions.rewritePath(
+                        "/auth-service/v3/api-docs(?<path>/?.*)", "/v3/api-docs${path}"
+                ))
+                .before(BeforeFilterFunctions.rewritePath(
+                        "/auth-service/swagger-ui(?<path>/?.*)", "/swagger-ui${path}"
+                ))
+                .before(BeforeFilterFunctions.uri("http://auth-service:4003"))
+                .build()
+                .and(
+                        GatewayRouterFunctions.route("user_service_openapi")
+                                .route(RequestPredicates.path("/user-service/v3/api-docs/**")
+                                                .or(RequestPredicates.path("/user-service/swagger-ui/**")),
+                                        HandlerFunctions.http())
+                                .before(BeforeFilterFunctions.rewritePath(
+                                        "/user-service/v3/api-docs(?<path>/?.*)", "/v3/api-docs${path}"
+                                ))
+                                .before(BeforeFilterFunctions.rewritePath(
+                                        "/user-service/swagger-ui(?<path>/?.*)", "/swagger-ui${path}"
+                                ))
+                                .before(BeforeFilterFunctions.uri("http://user-service:4002"))
+                                .build()
+                ).and(
+                        GatewayRouterFunctions.route("product_service_openapi")
+                                .route(RequestPredicates.path("/product-service/v3/api-docs/**")
+                                                .or(RequestPredicates.path("/product-service/swagger-ui/**")),
+                                        HandlerFunctions.http())
+                                .before(BeforeFilterFunctions.rewritePath(
+                                        "/product-service/v3/api-docs(?<path>/?.*)", "/v3/api-docs${path}"
+                                ))
+                                .before(BeforeFilterFunctions.rewritePath(
+                                        "/product-service/swagger-ui(?<path>/?.*)", "/swagger-ui${path}"
+                                ))
+                                .before(BeforeFilterFunctions.uri("http://product-service:4000"))
+                                .build()
+                );
+        log.info("Open Api Doc Router Function: {}", route);
         return route;
     }
 }

@@ -40,6 +40,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("api/v1/user/auth/**").permitAll()
+                                .requestMatchers("/swagger-ui/**", "/v3/api-docs*/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(errors -> errors.authenticationEntryPoint(unauthorizedHandler))
