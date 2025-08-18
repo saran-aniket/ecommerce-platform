@@ -1,12 +1,12 @@
-package com.learn.productservice.model;
+package com.learn.productservice.entities;
 
-import jakarta.persistence.*;
-
-import java.util.UUID;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "categories")
-public class Category extends BaseModel{
+public class Category extends BaseModel {
     @Column(length = 100, unique = true)
     private String name;
 

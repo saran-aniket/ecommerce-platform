@@ -3,6 +3,7 @@ package com.learn.usermicroservice.dtos;
 import com.learn.usermicroservice.models.entities.ApplicationUser;
 import com.learn.usermicroservice.models.entities.Customer;
 import com.learn.usermicroservice.models.entities.Seller;
+import com.learn.usermicroservice.utilities.USConstants;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,9 +23,9 @@ public class GetUserResponseDto {
         getUserResponseDto.setFirstName(applicationUser.getFirstName());
         getUserResponseDto.setLastName(applicationUser.getLastName());
         if (applicationUser instanceof Customer) {
-            getUserResponseDto.setUserRoleType("CUSTOMER");
+            getUserResponseDto.setUserRoleType(USConstants.CUSTOMER_ROLE);
         } else if (applicationUser instanceof Seller) {
-            getUserResponseDto.setUserRoleType("SELLER");
+            getUserResponseDto.setUserRoleType(USConstants.SELLER_ROLE);
             getUserResponseDto.setCompanyName(((Seller) applicationUser).getCompanyName());
         }
         return getUserResponseDto;

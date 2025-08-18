@@ -2,6 +2,7 @@ package com.learn.authenticationmicroservice.services.implementations;
 
 import com.learn.authenticationmicroservice.client.UserServiceClient;
 import com.learn.authenticationmicroservice.dtos.*;
+import com.learn.authenticationmicroservice.utilities.ASConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,12 +27,12 @@ class AuthenticationServiceImplTest {
         UserSignupRequestDto signupRequest = new UserSignupRequestDto();
         GenericResponseDto<UserDto> expectedResponse = new GenericResponseDto<>();
 
-        when(userServiceClient.signUp("CUSTOMER", signupRequest)).thenReturn(expectedResponse);
+        when(userServiceClient.signUp(ASConstants.CUSTOMER_ROLE, signupRequest)).thenReturn(expectedResponse);
 
-        GenericResponseDto<UserDto> result = authenticationServiceImpl.signUp("CUSTOMER", signupRequest);
+        GenericResponseDto<UserDto> result = authenticationServiceImpl.signUp(ASConstants.CUSTOMER_ROLE, signupRequest);
 
         assertSame(expectedResponse, result);
-        verify(userServiceClient, times(1)).signUp("CUSTOMER", signupRequest);
+        verify(userServiceClient, times(1)).signUp(ASConstants.CUSTOMER_ROLE, signupRequest);
     }
 
     @Test
@@ -39,12 +40,12 @@ class AuthenticationServiceImplTest {
         UserLoginRequestDto loginRequest = new UserLoginRequestDto();
         GenericResponseDto<UserDto> expectedResponse = new GenericResponseDto<>();
 
-        when(userServiceClient.login("CUSTOMER", loginRequest)).thenReturn(expectedResponse);
+        when(userServiceClient.login(ASConstants.CUSTOMER_ROLE, loginRequest)).thenReturn(expectedResponse);
 
-        GenericResponseDto<UserDto> result = authenticationServiceImpl.login("CUSTOMER", loginRequest);
+        GenericResponseDto<UserDto> result = authenticationServiceImpl.login(ASConstants.CUSTOMER_ROLE, loginRequest);
 
         assertSame(expectedResponse, result);
-        verify(userServiceClient, times(1)).login("CUSTOMER", loginRequest);
+        verify(userServiceClient, times(1)).login(ASConstants.CUSTOMER_ROLE, loginRequest);
     }
 
     @Test

@@ -30,6 +30,7 @@ public class UserController {
     }
 
     @PostMapping("/auth/signup")
+    @Hidden
     public ResponseEntity<GenericResponseDto<UserDto>> signUp(@RequestParam("roleType") String roleType,
                                                               @RequestBody UserSignupRequestDto userSignupRequestDto) {
         log.info("User Service | signup");
@@ -40,6 +41,7 @@ public class UserController {
 
 
     @PostMapping("/auth/login")
+    @Hidden
     public ResponseEntity<GenericResponseDto<UserDto>> login(@RequestParam("roleType") String roleType,
                                                              @RequestBody UserLoginRequestDto userLoginRequestDto) {
         log.info("User Service | login");
@@ -53,7 +55,8 @@ public class UserController {
     }
 
     @PostMapping("/auth/logout")
-    @PreAuthorize("hasRole('CUSTOMER') or hasRole('SELLER')")
+    @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SELLER')")
+    @Hidden
     public ResponseEntity<GenericResponseDto<Void>> logout(@RequestHeader("Authorization") String authHeader) {
         userAuthService.logout(authHeader.replace("Bearer ", ""));
         return ResponseEntity.status(HttpStatus.OK).body(GenericResponseDto.GenericResponseDtoFrom(ResponseStatus.SUCCESS, "", null));
@@ -75,7 +78,7 @@ public class UserController {
     }
 
     @PatchMapping("/profile")
-    @PreAuthorize("hasRole('CUSTOMER') or hasRole('SELLER')")
+    @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SELLER')")
     public ResponseEntity<GenericResponseDto<UserUpdateResponseDto>> updateProfile(@RequestParam("roleType") String roleType, @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
         ApplicationUser applicationUser = userService.updateUser(userUpdateRequestDto, roleType);
         UserUpdateResponseDto userUpdateResponseDto = modelMapper.map(applicationUser, UserUpdateResponseDto.class);
@@ -83,14 +86,14 @@ public class UserController {
     }
 
     @DeleteMapping("/profile")
-    @PreAuthorize("hasRole('CUSTOMER') or hasRole('SELLER')")
+    @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SELLER')")
     public ResponseEntity<GenericResponseDto<Void>> deleteProfile(@RequestParam("roleType") String roleType, @RequestBody UserDeleteRequestDto userDeleteRequestDto) {
         userService.deleteUser(userDeleteRequestDto.getEmail(), roleType);
         return ResponseEntity.ok().body(GenericResponseDto.GenericResponseDtoFrom(ResponseStatus.SUCCESS, "", null));
     }
 
     @GetMapping("/profile")
-    @PreAuthorize("hasRole('CUSTOMER') or hasRole('SELLER')")
+    @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SELLER')")
     @Hidden
     public ResponseEntity<GenericResponseDto<GetUserResponseDto>> getUserProfileById(@RequestParam("roleType") String roleType,
                                                                                      @RequestParam("userId") String userId) {

@@ -15,6 +15,7 @@ import com.learn.usermicroservice.repositories.CustomerRepository;
 import com.learn.usermicroservice.repositories.UserRoleRepository;
 import com.learn.usermicroservice.services.UserProfileService;
 import com.learn.usermicroservice.services.UserRoleService;
+import com.learn.usermicroservice.utilities.USConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -81,7 +82,7 @@ class UserServiceImplTest {
         signupDto.setLastName("Doe");
         signupDto.setPhoneNumber("1234567890");
         UserRole userRole = new UserRole();
-        userRole.setName(UserRoleType.CUSTOMER.name());
+        userRole.setName(UserRoleType.ROLE_CUSTOMER.name());
         ApplicationUser user = new ApplicationUser();
         user.setUserRoles(Collections.singletonList(userRole));
 
@@ -91,10 +92,10 @@ class UserServiceImplTest {
         when(bCryptPasswordEncoder.encode("password")).thenReturn("hashed");
         doThrow(new UserRoleDoesNotExistException("User Role does not exist")).when(userRoleService).getUserRoleByName(null);
         when(userRoleService.createUserRole(any(UserRole.class))).thenReturn(userRole);
-        when(userProfileFactory.getUserRoleType()).thenReturn(UserRoleType.CUSTOMER);
+        when(userProfileFactory.getUserRoleType()).thenReturn(UserRoleType.ROLE_CUSTOMER);
         when(userProfileService.createUserProfile(any(UserSignupRequestDto.class), any(ApplicationUser.class))).thenReturn(user);
 
-        user = userService.createUser(signupDto, "CUSTOMER");
+        user = userService.createUser(signupDto, USConstants.CUSTOMER_ROLE);
 
         assertNotNull(user);
     }
@@ -105,7 +106,7 @@ class UserServiceImplTest {
         signupDto.setEmail("test@example.com");
 
         UserRole userRole = new UserRole();
-        userRole.setName(UserRoleType.CUSTOMER.name());
+        userRole.setName(UserRoleType.ROLE_CUSTOMER.name());
         List<UserRole> roles = new ArrayList<>();
         roles.add(userRole);
 
@@ -116,10 +117,10 @@ class UserServiceImplTest {
                 .thenReturn(Optional.of(existingUser));
         when(userProfileFactory.getUserProfileServiceBeanName()).thenReturn("defaultService");
         when(userRoleService.getUserRoleByName(anyString())).thenReturn(userRole);
-        when(userProfileFactory.getUserRoleType()).thenReturn(UserRoleType.CUSTOMER);
+        when(userProfileFactory.getUserRoleType()).thenReturn(UserRoleType.ROLE_CUSTOMER);
 
         assertThrows(DuplicateEmailException.class,
-                () -> userService.createUser(signupDto, "CUSTOMER"));
+                () -> userService.createUser(signupDto, USConstants.CUSTOMER_ROLE));
     }
 
     @Test
@@ -133,14 +134,14 @@ class UserServiceImplTest {
         ApplicationUser user = new ApplicationUser();
         user.setEmail("test@example.com");
 
-        when(userRoleService.getUserRoleByName("CUSTOMER")).thenReturn(new UserRole());
+        when(userRoleService.getUserRoleByName(USConstants.CUSTOMER_ROLE)).thenReturn(new UserRole());
         when(applicationUserRepository.findApplicationUserByEmailAndUserRoles(eq("test@example.com"), anyList()))
                 .thenReturn(Optional.of(user));
         when(userProfileFactory.getUserProfileServiceBeanName()).thenReturn("defaultService");
         when(userProfileFactory.getConvertedUserUpdateRequestDto(updateDto)).thenReturn(updateDto);
         when(userProfileService.updateUserProfile(any(UserUpdateRequestDto.class), any(ApplicationUser.class))).thenReturn(user);
 
-        ApplicationUser result = userService.updateUser(updateDto, "CUSTOMER");
+        ApplicationUser result = userService.updateUser(updateDto, USConstants.CUSTOMER_ROLE);
         assertNotNull(result);
         verify(userProfileService).updateUserProfile(updateDto, user);
     }
@@ -148,13 +149,13 @@ class UserServiceImplTest {
     @Test
     void deleteUser_shouldDeactivateUser() {
         String email = "test@example.com";
-        String roleType = "CUSTOMER";
+        String roleType = USConstants.CUSTOMER_ROLE;
 
         ApplicationUser user = new ApplicationUser();
         user.setEmail(email);
         user.setActive(true);
 
-        when(userRoleService.getUserRoleByName("CUSTOMER")).thenReturn(new UserRole());
+        when(userRoleService.getUserRoleByName(USConstants.CUSTOMER_ROLE)).thenReturn(new UserRole());
         when(applicationUserRepository.findApplicationUserByEmailAndUserRoles(eq(email), anyList()))
                 .thenReturn(Optional.of(user));
 

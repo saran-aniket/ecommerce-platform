@@ -2,6 +2,7 @@ package com.learn.authenticationmicroservice.controllers;
 
 import com.learn.authenticationmicroservice.dtos.*;
 import com.learn.authenticationmicroservice.services.AuthenticationService;
+import com.learn.authenticationmicroservice.utilities.ASConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,10 +39,10 @@ class AuthenticationControllerTest {
     @Test
     void login() throws Exception {
         GenericResponseDto<UserDto> responseDto = new GenericResponseDto<>();
-        when(authenticationService.login(eq("CUSTOMER"), any(UserLoginRequestDto.class))).thenReturn(responseDto);
+        when(authenticationService.login(eq(ASConstants.CUSTOMER_ROLE), any(UserLoginRequestDto.class))).thenReturn(responseDto);
 
         mockMvc.perform(post("/api/v1/authentication/users/login")
-                        .param("roleType", "CUSTOMER")
+                        .param("roleType", ASConstants.CUSTOMER_ROLE)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"email\":\"test@example.com\",\"password\":\"password\"}"))
                 .andExpect(status().isOk());
@@ -50,10 +51,10 @@ class AuthenticationControllerTest {
     @Test
     void register() throws Exception {
         GenericResponseDto<UserDto> responseDto = new GenericResponseDto<>();
-        when(authenticationService.signUp(eq("CUSTOMER"), any(UserSignupRequestDto.class))).thenReturn(responseDto);
+        when(authenticationService.signUp(eq(ASConstants.CUSTOMER_ROLE), any(UserSignupRequestDto.class))).thenReturn(responseDto);
 
         mockMvc.perform(post("/api/v1/authentication/users/register")
-                        .param("roleType", "CUSTOMER")
+                        .param("roleType", ASConstants.CUSTOMER_ROLE)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"email\":\"test@example.com\",\"password\":\"password\",\"firstName\":\"John\",\"lastName\":\"Doe\"}"))
                 .andExpect(status().isOk());

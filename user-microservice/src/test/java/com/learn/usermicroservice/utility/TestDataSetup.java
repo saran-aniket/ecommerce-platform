@@ -3,6 +3,7 @@ package com.learn.usermicroservice.utility;
 import com.learn.usermicroservice.models.entities.ApplicationUser;
 import com.learn.usermicroservice.models.entities.Customer;
 import com.learn.usermicroservice.models.entities.UserRole;
+import com.learn.usermicroservice.utilities.USConstants;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,7 +38,7 @@ public class TestDataSetup {
     public static List<UserRole> getCustomerUserRole() {
         List<UserRole> userRoleList = new ArrayList<>();
         UserRole userRole = new UserRole();
-        userRole.setName("CUSTOMER");
+        userRole.setName(USConstants.CUSTOMER_ROLE);
         userRoleList.add(userRole);
         return userRoleList;
     }

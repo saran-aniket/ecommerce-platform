@@ -1,7 +1,7 @@
 package com.learn.productservice.services;
 
 import com.learn.productservice.dtos.ProductRequestDto;
-import com.learn.productservice.model.Product;
+import com.learn.productservice.entities.Product;
 
 import java.util.List;
 import java.util.UUID;

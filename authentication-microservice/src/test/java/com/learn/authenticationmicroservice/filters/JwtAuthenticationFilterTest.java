@@ -4,6 +4,7 @@ import com.learn.authenticationmicroservice.client.UserServiceClient;
 import com.learn.authenticationmicroservice.dtos.AuthenticationDto;
 import com.learn.authenticationmicroservice.dtos.GenericResponseDto;
 import com.learn.authenticationmicroservice.dtos.ResponseStatus;
+import com.learn.authenticationmicroservice.utilities.ASConstants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -70,7 +71,7 @@ class JwtAuthenticationFilterTest {
         when(mockRequest.getHeader("Authorization")).thenReturn("Bearer " + token);
 
         AuthenticationDto authDto = new AuthenticationDto();
-        authDto.setAuthorities(List.of("CUSTOMER", "ADMIN"));
+        authDto.setAuthorities(List.of(ASConstants.CUSTOMER_ROLE, ASConstants.ADMIN_ROLE));
         GenericResponseDto<AuthenticationDto> responseDto = new GenericResponseDto<>();
         responseDto.setStatus(ResponseStatus.SUCCESS);
         responseDto.setData(authDto);
@@ -83,7 +84,7 @@ class JwtAuthenticationFilterTest {
         assertNotNull(authentication);
         assertEquals(token, authentication.getPrincipal());
         assertTrue(authentication.getAuthorities().stream()
-                .anyMatch(a -> "CUSTOMER".equals(a.getAuthority())));
+                .anyMatch(a -> ASConstants.CUSTOMER_ROLE.equals(a.getAuthority())));
         verify(mockFilterChain).doFilter(mockRequest, mockResponse);
     }
 

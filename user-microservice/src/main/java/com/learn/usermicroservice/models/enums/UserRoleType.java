@@ -1,7 +1,7 @@
 package com.learn.usermicroservice.models.enums;
 
 public enum UserRoleType {
-    ADMIN,
-    CUSTOMER,
-    SELLER
+    ROLE_ADMIN,
+    ROLE_CUSTOMER,
+    ROLE_SELLER
 }

@@ -1,4 +1,4 @@
-package com.learn.productservice.model;
+package com.learn.productservice.entities;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.*;

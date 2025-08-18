@@ -22,11 +22,11 @@ public class UserProfileFactory {
     }
 
     public String getUserProfileServiceBeanName() {
-        if (userRoleType.equals(UserRoleType.CUSTOMER)) {
+        if (userRoleType.equals(UserRoleType.ROLE_CUSTOMER)) {
             return "customerUserProfileService";
-        } else if (userRoleType.equals(UserRoleType.SELLER)) {
+        } else if (userRoleType.equals(UserRoleType.ROLE_SELLER)) {
             return "sellerUserProfileService";
-        } else if (userRoleType.equals(UserRoleType.ADMIN)) {
+        } else if (userRoleType.equals(UserRoleType.ROLE_ADMIN)) {
             return "adminUserProfileService";
         } else {
             throw new IllegalArgumentException("Invalid user role type");
@@ -34,9 +34,9 @@ public class UserProfileFactory {
     }
 
     public UserSignupRequestDto getConvertedUserSignupRequestDto(UserSignupRequestDto userSignupRequestDto) {
-        if (userRoleType.equals(UserRoleType.CUSTOMER)) {
+        if (userRoleType.equals(UserRoleType.ROLE_CUSTOMER)) {
             return objectMapper.convertValue(userSignupRequestDto, CustomerSignUpRequestDto.class);
-        } else if (userRoleType.equals(UserRoleType.SELLER)) {
+        } else if (userRoleType.equals(UserRoleType.ROLE_SELLER)) {
             return objectMapper.convertValue(userSignupRequestDto, SellerSignUpRequestDto.class);
         } else {
             throw new IllegalArgumentException("Invalid user role type");
@@ -44,9 +44,9 @@ public class UserProfileFactory {
     }
 
     public UserUpdateRequestDto getConvertedUserUpdateRequestDto(UserUpdateRequestDto userUpdateRequestDto) {
-        if (userRoleType.equals(UserRoleType.CUSTOMER)) {
+        if (userRoleType.equals(UserRoleType.ROLE_CUSTOMER)) {
             return objectMapper.convertValue(userUpdateRequestDto, CustomerUserUpdateRequestDto.class);
-        } else if (userRoleType.equals(UserRoleType.SELLER)) {
+        } else if (userRoleType.equals(UserRoleType.ROLE_SELLER)) {
             return objectMapper.convertValue(userUpdateRequestDto, SellerUserUpdateRequestDto.class);
         } else {
             throw new IllegalArgumentException("Invalid user role type");

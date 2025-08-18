@@ -3,6 +3,7 @@ package com.learn.usermicroservice.services.implementation;
 import com.learn.usermicroservice.exceptions.UserRoleDoesNotExistException;
 import com.learn.usermicroservice.models.entities.UserRole;
 import com.learn.usermicroservice.repositories.UserRoleRepository;
+import com.learn.usermicroservice.utilities.USConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -41,7 +42,7 @@ class UserRoleServiceImplTest {
 
     @Test
     void getUserRoleByName_shouldReturnUserRoleIfPresent() {
-        String name = "ADMIN";
+        String name = USConstants.ADMIN_ROLE;
         UserRole userRole = new UserRole();
         userRole.setName(name);
 

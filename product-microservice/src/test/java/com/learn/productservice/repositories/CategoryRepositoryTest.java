@@ -1,6 +1,6 @@
 package com.learn.productservice.repositories;
 
-import com.learn.productservice.model.Category;
+import com.learn.productservice.entities.Category;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

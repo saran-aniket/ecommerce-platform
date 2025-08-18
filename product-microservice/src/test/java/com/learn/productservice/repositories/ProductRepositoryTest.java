@@ -1,8 +1,8 @@
 // ProductRepositoryTest.java
 package com.learn.productservice.repositories;
 
-import com.learn.productservice.model.Category;
-import com.learn.productservice.model.Product;
+import com.learn.productservice.entities.Category;
+import com.learn.productservice.entities.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,5 +1,6 @@
 package com.learn.usermicroservice.services.implementation;
 
+import com.learn.usermicroservice.utilities.USConstants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +25,7 @@ class JwtServiceImplTest {
         jwtServiceImpl = new JwtServiceImpl(SECRET, EXPIRATION);
         testClaims = new HashMap<>();
         testClaims.put("sub", "testuser");
-        testClaims.put("authorities", Arrays.asList("CUSTOMER", "ADMIN"));
+        testClaims.put("authorities", Arrays.asList(USConstants.CUSTOMER_ROLE, USConstants.ADMIN_ROLE));
         validToken = jwtServiceImpl.generateToken(testClaims);
     }
 
@@ -39,7 +40,7 @@ class JwtServiceImplTest {
     void extractAllClaims_shouldReturnClaims() {
         Claims claims = jwtServiceImpl.extractAllClaims(validToken);
         assertEquals("testuser", claims.get("sub"));
-        assertEquals(Arrays.asList("CUSTOMER", "ADMIN"), claims.get("authorities"));
+        assertEquals(Arrays.asList(USConstants.CUSTOMER_ROLE, USConstants.ADMIN_ROLE), claims.get("authorities"));
     }
 
     @Test
@@ -61,7 +62,7 @@ class JwtServiceImplTest {
         String token = jwtServiceImpl.generateToken(claimsMap);
         Claims claims = jwtServiceImpl.extractAllClaims(token);
         assertEquals("testuser", claims.get("sub"));
-        assertEquals(Arrays.asList("CUSTOMER", "ADMIN"), claims.get("authorities"));
+        assertEquals(Arrays.asList(USConstants.CUSTOMER_ROLE, USConstants.ADMIN_ROLE), claims.get("authorities"));
     }
 
     @Test
@@ -71,8 +72,8 @@ class JwtServiceImplTest {
         assertEquals(validToken, auth.getPrincipal());
         Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
         assertNotNull(authorities);
-        assertTrue(authorities.stream().anyMatch(a -> a.getAuthority().equals("CUSTOMER")));
-        assertTrue(authorities.stream().anyMatch(a -> a.getAuthority().equals("ADMIN")));
+        assertTrue(authorities.stream().anyMatch(a -> a.getAuthority().equals(USConstants.CUSTOMER_ROLE)));
+        assertTrue(authorities.stream().anyMatch(a -> a.getAuthority().equals(USConstants.ADMIN_ROLE)));
     }
 
     @Test

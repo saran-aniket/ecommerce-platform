@@ -1,6 +1,6 @@
 package com.learn.productservice.repositories;
 
-import com.learn.productservice.model.Product;
+import com.learn.productservice.entities.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

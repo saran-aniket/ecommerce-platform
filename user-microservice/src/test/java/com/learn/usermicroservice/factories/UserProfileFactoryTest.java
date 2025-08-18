@@ -3,6 +3,7 @@ package com.learn.usermicroservice.factories;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learn.usermicroservice.dtos.*;
 import com.learn.usermicroservice.models.enums.UserRoleType;
+import com.learn.usermicroservice.utilities.USConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,14 +28,14 @@ class UserProfileFactoryTest {
 
     @Test
     void setUserRoleType_setsCorrectRoleType() {
-        userProfileFactory.setUserRoleType("CUSTOMER");
-        assertEquals(UserRoleType.CUSTOMER, userProfileFactory.getUserRoleType());
+        userProfileFactory.setUserRoleType(USConstants.CUSTOMER_ROLE);
+        assertEquals(UserRoleType.ROLE_CUSTOMER, userProfileFactory.getUserRoleType());
 
-        userProfileFactory.setUserRoleType("SELLER");
-        assertEquals(UserRoleType.SELLER, userProfileFactory.getUserRoleType());
+        userProfileFactory.setUserRoleType(USConstants.SELLER_ROLE);
+        assertEquals(UserRoleType.ROLE_SELLER, userProfileFactory.getUserRoleType());
 
-        userProfileFactory.setUserRoleType("ADMIN");
-        assertEquals(UserRoleType.ADMIN, userProfileFactory.getUserRoleType());
+        userProfileFactory.setUserRoleType(USConstants.ADMIN_ROLE);
+        assertEquals(UserRoleType.ROLE_ADMIN, userProfileFactory.getUserRoleType());
     }
 
     @Test
@@ -44,13 +45,13 @@ class UserProfileFactoryTest {
 
     @Test
     void getUserProfileServiceBeanName_returnsCorrectBean() {
-        userProfileFactory.setUserRoleType("CUSTOMER");
+        userProfileFactory.setUserRoleType(USConstants.CUSTOMER_ROLE);
         assertEquals("customerUserProfileService", userProfileFactory.getUserProfileServiceBeanName());
 
-        userProfileFactory.setUserRoleType("SELLER");
+        userProfileFactory.setUserRoleType(USConstants.SELLER_ROLE);
         assertEquals("sellerUserProfileService", userProfileFactory.getUserProfileServiceBeanName());
 
-        userProfileFactory.setUserRoleType("ADMIN");
+        userProfileFactory.setUserRoleType(USConstants.ADMIN_ROLE);
         assertEquals("adminUserProfileService", userProfileFactory.getUserProfileServiceBeanName());
     }
 
@@ -62,14 +63,14 @@ class UserProfileFactoryTest {
 
     @Test
     void getUserProfileServiceBeanName_withInvalidRole_throwsException() {
-        userProfileFactory.setUserRoleType("CUSTOMER");
+        userProfileFactory.setUserRoleType(USConstants.CUSTOMER_ROLE);
         assertEquals("customerUserProfileService", userProfileFactory.getUserProfileServiceBeanName());
         // There isn’t a path to invalid UserRoleType in code, except for null set; covered above.
     }
 
     @Test
     void getConvertedUserSignupRequestDto_returnsCorrectDtoForCustomer() {
-        userProfileFactory.setUserRoleType("CUSTOMER");
+        userProfileFactory.setUserRoleType(USConstants.CUSTOMER_ROLE);
         UserSignupRequestDto dto = new UserSignupRequestDto();
         CustomerSignUpRequestDto converted = new CustomerSignUpRequestDto();
         when(objectMapper.convertValue(dto, CustomerSignUpRequestDto.class)).thenReturn(converted);
@@ -79,7 +80,7 @@ class UserProfileFactoryTest {
 
     @Test
     void getConvertedUserSignupRequestDto_returnsCorrectDtoForSeller() {
-        userProfileFactory.setUserRoleType("SELLER");
+        userProfileFactory.setUserRoleType(USConstants.SELLER_ROLE);
         UserSignupRequestDto dto = new UserSignupRequestDto();
         SellerSignUpRequestDto converted = new SellerSignUpRequestDto();
         when(objectMapper.convertValue(dto, SellerSignUpRequestDto.class)).thenReturn(converted);
@@ -89,14 +90,14 @@ class UserProfileFactoryTest {
 
     @Test
     void getConvertedUserSignupRequestDto_withInvalidRole_throwsException() {
-        userProfileFactory.setUserRoleType("ADMIN");
+        userProfileFactory.setUserRoleType(USConstants.ADMIN_ROLE);
         UserSignupRequestDto dto = new UserSignupRequestDto();
         assertThrows(IllegalArgumentException.class, () -> userProfileFactory.getConvertedUserSignupRequestDto(dto));
     }
 
     @Test
     void getConvertedUserUpdateRequestDto_returnsCorrectDtoForCustomer() {
-        userProfileFactory.setUserRoleType("CUSTOMER");
+        userProfileFactory.setUserRoleType(USConstants.CUSTOMER_ROLE);
         UserUpdateRequestDto dto = new UserUpdateRequestDto();
         CustomerUserUpdateRequestDto converted = new CustomerUserUpdateRequestDto();
         when(objectMapper.convertValue(dto, CustomerUserUpdateRequestDto.class)).thenReturn(converted);
@@ -106,7 +107,7 @@ class UserProfileFactoryTest {
 
     @Test
     void getConvertedUserUpdateRequestDto_returnsCorrectDtoForSeller() {
-        userProfileFactory.setUserRoleType("SELLER");
+        userProfileFactory.setUserRoleType(USConstants.SELLER_ROLE);
         UserUpdateRequestDto dto = new UserUpdateRequestDto();
         SellerUserUpdateRequestDto converted = new SellerUserUpdateRequestDto();
         when(objectMapper.convertValue(dto, SellerUserUpdateRequestDto.class)).thenReturn(converted);
@@ -116,7 +117,7 @@ class UserProfileFactoryTest {
 
     @Test
     void getConvertedUserUpdateRequestDto_withInvalidRole_throwsException() {
-        userProfileFactory.setUserRoleType("ADMIN");
+        userProfileFactory.setUserRoleType(USConstants.ADMIN_ROLE);
         UserUpdateRequestDto dto = new UserUpdateRequestDto();
         assertThrows(IllegalArgumentException.class, () -> userProfileFactory.getConvertedUserUpdateRequestDto(dto));
     }

@@ -1,6 +1,7 @@
 package com.learn.usermicroservice.repositories;
 
 import com.learn.usermicroservice.models.entities.UserRole;
+import com.learn.usermicroservice.utilities.USConstants;
 import com.learn.usermicroservice.utility.TestDataSetup;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,10 +31,10 @@ class UserRoleRepositoryTest {
 
     @Test
     void findUserRoleByName_Success() {
-        Mockito.when(userRoleRepository.findUserRoleByName("CUSTOMER")).thenReturn(Optional.ofNullable(userRole.getFirst()));
+        Mockito.when(userRoleRepository.findUserRoleByName(USConstants.CUSTOMER_ROLE)).thenReturn(Optional.ofNullable(userRole.getFirst()));
 
-        Optional<UserRole> userRole1 = userRoleRepository.findUserRoleByName("CUSTOMER");
-        Mockito.verify(userRoleRepository).findUserRoleByName("CUSTOMER");
+        Optional<UserRole> userRole1 = userRoleRepository.findUserRoleByName(USConstants.CUSTOMER_ROLE);
+        Mockito.verify(userRoleRepository).findUserRoleByName(USConstants.CUSTOMER_ROLE);
 
         assertTrue(userRole1.isPresent());
         assertEquals(userRole.getFirst().getName(), userRole1.get().getName());
@@ -41,10 +42,10 @@ class UserRoleRepositoryTest {
 
     @Test
     void findUserRoleByName_Failure() {
-        Mockito.when(userRoleRepository.findUserRoleByName("CUSTOMER")).thenReturn(Optional.empty());
+        Mockito.when(userRoleRepository.findUserRoleByName(USConstants.CUSTOMER_ROLE)).thenReturn(Optional.empty());
 
-        Optional<UserRole> userRole1 = userRoleRepository.findUserRoleByName("CUSTOMER");
-        Mockito.verify(userRoleRepository).findUserRoleByName("CUSTOMER");
+        Optional<UserRole> userRole1 = userRoleRepository.findUserRoleByName(USConstants.CUSTOMER_ROLE);
+        Mockito.verify(userRoleRepository).findUserRoleByName(USConstants.CUSTOMER_ROLE);
 
         assertTrue(userRole1.isEmpty());
     }

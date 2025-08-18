@@ -6,6 +6,7 @@ import com.learn.usermicroservice.models.Token;
 import com.learn.usermicroservice.models.entities.ApplicationUser;
 import com.learn.usermicroservice.services.UserAuthService;
 import com.learn.usermicroservice.services.UserService;
+import com.learn.usermicroservice.utilities.USConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,11 +58,11 @@ class UserControllerTest {
         ApplicationUser applicationUser = new ApplicationUser();
         UserDto userDto = new UserDto();
 
-        given(userService.createUser(any(UserSignupRequestDto.class), eq("CUSTOMER"))).willReturn(applicationUser);
+        given(userService.createUser(any(UserSignupRequestDto.class), eq(USConstants.CUSTOMER_ROLE))).willReturn(applicationUser);
         given(modelMapper.map(applicationUser, UserDto.class)).willReturn(userDto);
 
         mockMvc.perform(post("/api/v1/user/auth/signup")
-                        .param("roleType", "CUSTOMER")
+                        .param("roleType", USConstants.CUSTOMER_ROLE)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"firstName\":\"John\",\"lastName\":\"Doe\",\"email\":\"john@doe.com\",\"password\":\"password\",\"phoneNumber\":\"123456789\"}"))
                 .andExpect(status().isCreated())
@@ -77,10 +78,10 @@ class UserControllerTest {
         Token token = new Token();
         token.setAccessToken("test-token");
 
-        when(userAuthService.login(anyString(), anyString(), eq("CUSTOMER"))).thenReturn(token);
+        when(userAuthService.login(anyString(), anyString(), eq(USConstants.CUSTOMER_ROLE))).thenReturn(token);
 
         mockMvc.perform(post("/api/v1/user/auth/login")
-                        .param("roleType", "CUSTOMER")
+                        .param("roleType", USConstants.CUSTOMER_ROLE)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"email\":\"john@doe.com\",\"password\":\"password\"}"))
                 .andExpect(status().isOk())
@@ -103,11 +104,11 @@ class UserControllerTest {
         ApplicationUser applicationUser = new ApplicationUser();
         UserUpdateResponseDto userUpdateResponseDto = new UserUpdateResponseDto();
 
-        when(userService.updateUser(any(UserUpdateRequestDto.class), eq("CUSTOMER"))).thenReturn(applicationUser);
+        when(userService.updateUser(any(UserUpdateRequestDto.class), eq(USConstants.CUSTOMER_ROLE))).thenReturn(applicationUser);
         when(modelMapper.map(applicationUser, UserUpdateResponseDto.class)).thenReturn(userUpdateResponseDto);
 
         mockMvc.perform(patch("/api/v1/user/profile")
-                        .param("roleType", "CUSTOMER")
+                        .param("roleType", USConstants.CUSTOMER_ROLE)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"firstName\":\"Jane\",\"lastName\":\"Smith\"}"))
                 .andExpect(status().isOk())
@@ -142,7 +143,7 @@ class UserControllerTest {
         doNothing().when(userService).deleteUser(anyString(), anyString());
 
         mockMvc.perform(delete("/api/v1/user/profile")
-                        .param("roleType", "CUSTOMER")
+                        .param("roleType", USConstants.CUSTOMER_ROLE)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"email\" : \"jane@test.com\"}"))
                 .andExpect(status().isOk())

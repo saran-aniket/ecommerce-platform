@@ -1,11 +1,9 @@
 package com.learn.productservice.mapper;
 
-import com.learn.productservice.dtos.FakeStoreProductResponse;
 import com.learn.productservice.dtos.ProductRequestDto;
 import com.learn.productservice.dtos.ProductResponseDto;
-import com.learn.productservice.model.Category;
-import com.learn.productservice.model.Product;
-import fakestoreproduct.ProductResponse;
+import com.learn.productservice.entities.Category;
+import com.learn.productservice.entities.Product;
 
 public class ProductMapper {
     public static Product toProduct(ProductRequestDto productRequestDto) {

@@ -10,6 +10,7 @@ import com.learn.usermicroservice.models.entities.UserRole;
 import com.learn.usermicroservice.models.enums.UserRoleType;
 import com.learn.usermicroservice.repositories.ApplicationUserRepository;
 import com.learn.usermicroservice.services.UserRoleService;
+import com.learn.usermicroservice.utilities.USConstants;
 import io.jsonwebtoken.Claims;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,7 +61,7 @@ class UserAuthServiceImplTest {
         String email = "user@example.com";
         String password = "password";
         String encodedPassword = "encodedPassword";
-        String roleType = "CUSTOMER";
+        String roleType = USConstants.CUSTOMER_ROLE;
         String generatedToken = "jwt-token";
         long expiresAtMillis = System.currentTimeMillis() + 10000;
 
@@ -89,7 +90,7 @@ class UserAuthServiceImplTest {
     void login_shouldThrowInvalidCredentials_whenUserNotFound() {
         String email = "nouser@example.com";
         String password = "password";
-        String roleType = "CUSTOMER";
+        String roleType = USConstants.CUSTOMER_ROLE;
         UserRole userRole = new UserRole();
 
         when(userProfileFactory.getUserRoleType()).thenReturn(UserRoleType.valueOf(roleType));
@@ -105,7 +106,7 @@ class UserAuthServiceImplTest {
     void login_shouldThrowInvalidCredentials_whenUserRoleNotPresent() {
         String email = "user@example.com";
         String password = "password";
-        String roleType = "SELLER";
+        String roleType = USConstants.SELLER_ROLE;
         UserRole requiredRole = new UserRole();
         ApplicationUser user = new ApplicationUser();
         user.setUserRoles(List.of()); // User has no matching role
@@ -124,7 +125,7 @@ class UserAuthServiceImplTest {
         String email = "user@example.com";
         String password = "wrong";
         String encodedPassword = "encoded";
-        String roleType = "SELLER";
+        String roleType = USConstants.SELLER_ROLE;
         UserRole userRole = new UserRole();
         ApplicationUser user = new ApplicationUser();
         user.setPassword(encodedPassword);

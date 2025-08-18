@@ -2,7 +2,7 @@ package com.learn.productservice.controllers;
 
 import com.learn.productservice.dtos.*;
 import com.learn.productservice.mapper.ProductMapper;
-import com.learn.productservice.model.Product;
+import com.learn.productservice.entities.Product;
 import com.learn.productservice.services.InventoryService;
 import com.learn.productservice.services.ProductService;
 import org.junit.jupiter.api.Test;
