@@ -3,11 +3,13 @@ package com.learn.productservice.configs;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learn.productservice.dtos.GenericResponseDto;
 import com.learn.productservice.exceptions.CustomFeignException;
+import feign.RequestInterceptor;
 import feign.Response;
 import feign.codec.ErrorDecoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,6 +17,11 @@ import java.io.InputStream;
 @Slf4j
 @Configuration
 public class CustomFeignClientConfiguration {
+
+    @Bean
+    RequestInterceptor requestInterceptor() {
+        return template -> template.header("Authorization", SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+    }
 
     /**
      * Provides a custom {@link ErrorDecoder} bean for Feign clients.

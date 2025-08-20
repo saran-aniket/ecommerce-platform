@@ -6,6 +6,7 @@ import com.learn.usermicroservice.exceptions.UnauthorizedException;
 import com.learn.usermicroservice.factories.UserProfileFactory;
 import com.learn.usermicroservice.models.Token;
 import com.learn.usermicroservice.models.entities.ApplicationUser;
+import com.learn.usermicroservice.models.entities.ApplicationUserRole;
 import com.learn.usermicroservice.models.entities.UserRole;
 import com.learn.usermicroservice.models.enums.UserRoleType;
 import com.learn.usermicroservice.repositories.ApplicationUserRepository;
@@ -21,7 +22,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -48,6 +48,9 @@ class UserAuthServiceImplTest {
     @Mock
     private UserRoleService userRoleService;
 
+    @Mock
+    private UserServiceImpl userService;
+
     @InjectMocks
     private UserAuthServiceImpl userAuthService;
 
@@ -68,13 +71,18 @@ class UserAuthServiceImplTest {
         UserRole userRole = new UserRole();
         ApplicationUser user = new ApplicationUser();
         user.setPassword(encodedPassword);
-        user.setUserRoles(List.of(userRole));
+
+        ApplicationUserRole applicationUserRole = new ApplicationUserRole();
+        applicationUserRole.setUserRole(userRole);
+        applicationUserRole.setApplicationUser(user);
+        applicationUserRole.setIsActive(true);
 
         when(userProfileFactory.getUserRoleType()).thenReturn(UserRoleType.valueOf(roleType));
-        when(userRoleService.getUserRoleByName(roleType)).thenReturn(userRole);
+        when(userRoleService.getUserRoleByName(roleType)).thenReturn(Optional.of(userRole));
         when(applicationUserRepository.findApplicationUserByEmail(email)).thenReturn(Optional.of(user));
         when(bCryptPasswordEncoder.matches(password, encodedPassword)).thenReturn(true);
         when(jwtService.generateToken(any(Map.class))).thenReturn(generatedToken);
+        when(userService.getUserByRoleTypeAndEmail(anyString(), any(UserRoleType.class))).thenReturn(Optional.of(applicationUserRole));
         Date expiration = new Date(expiresAtMillis);
         when(jwtService.extractExpiration(generatedToken)).thenReturn(expiration);
 
@@ -94,7 +102,7 @@ class UserAuthServiceImplTest {
         UserRole userRole = new UserRole();
 
         when(userProfileFactory.getUserRoleType()).thenReturn(UserRoleType.valueOf(roleType));
-        when(userRoleService.getUserRoleByName(roleType)).thenReturn(userRole);
+        when(userRoleService.getUserRoleByName(roleType)).thenReturn(Optional.of(userRole));
         when(applicationUserRepository.findApplicationUserByEmail(email)).thenReturn(Optional.empty());
 
         assertThrows(InvalidCredentialException.class, () -> {
@@ -109,10 +117,33 @@ class UserAuthServiceImplTest {
         String roleType = USConstants.SELLER_ROLE;
         UserRole requiredRole = new UserRole();
         ApplicationUser user = new ApplicationUser();
-        user.setUserRoles(List.of()); // User has no matching role
 
+        when(userService.getUserByRoleTypeAndEmail(roleType, UserRoleType.valueOf(roleType))).thenReturn(Optional.empty());
         when(userProfileFactory.getUserRoleType()).thenReturn(UserRoleType.valueOf(roleType));
-        when(userRoleService.getUserRoleByName(roleType)).thenReturn(requiredRole);
+        when(userRoleService.getUserRoleByName(roleType)).thenReturn(Optional.of(requiredRole));
+        when(applicationUserRepository.findApplicationUserByEmail(email)).thenReturn(Optional.of(user));
+
+        assertThrows(InvalidCredentialException.class, () -> {
+            userAuthService.login(email, password, roleType);
+        });
+    }
+
+    @Test
+    void login_shouldThrowInvalidCredentials_whenUserRolePresentAndNotActive() {
+        String email = "user@example.com";
+        String password = "password";
+        String roleType = USConstants.SELLER_ROLE;
+        UserRole requiredRole = new UserRole();
+        ApplicationUser user = new ApplicationUser();
+
+        ApplicationUserRole applicationUserRole = new ApplicationUserRole();
+        applicationUserRole.setUserRole(requiredRole);
+        applicationUserRole.setApplicationUser(user);
+        applicationUserRole.setIsActive(false);
+
+        when(userService.getUserByRoleTypeAndEmail(roleType, UserRoleType.valueOf(roleType))).thenReturn(Optional.of(applicationUserRole));
+        when(userProfileFactory.getUserRoleType()).thenReturn(UserRoleType.valueOf(roleType));
+        when(userRoleService.getUserRoleByName(roleType)).thenReturn(Optional.of(requiredRole));
         when(applicationUserRepository.findApplicationUserByEmail(email)).thenReturn(Optional.of(user));
 
         assertThrows(InvalidCredentialException.class, () -> {
@@ -129,10 +160,15 @@ class UserAuthServiceImplTest {
         UserRole userRole = new UserRole();
         ApplicationUser user = new ApplicationUser();
         user.setPassword(encodedPassword);
-        user.setUserRoles(List.of(userRole));
 
+        ApplicationUserRole applicationUserRole = new ApplicationUserRole();
+        applicationUserRole.setUserRole(userRole);
+        applicationUserRole.setApplicationUser(user);
+        applicationUserRole.setIsActive(true);
+
+        when(userService.getUserByRoleTypeAndEmail(roleType, UserRoleType.valueOf(roleType))).thenReturn(Optional.of(applicationUserRole));
         when(userProfileFactory.getUserRoleType()).thenReturn(UserRoleType.valueOf(roleType));
-        when(userRoleService.getUserRoleByName(roleType)).thenReturn(userRole);
+        when(userRoleService.getUserRoleByName(roleType)).thenReturn(Optional.of(userRole));
         when(applicationUserRepository.findApplicationUserByEmail(email)).thenReturn(Optional.of(user));
         when(bCryptPasswordEncoder.matches(password, encodedPassword)).thenReturn(false);
 

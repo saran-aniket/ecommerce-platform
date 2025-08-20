@@ -40,7 +40,7 @@ public class ApplicationConfiguration {
                 .build()
                 .and(
                         GatewayRouterFunctions.route("user_route")
-                                .route(RequestPredicates.POST("/api/v1/user/**"), HandlerFunctions.http())
+                                .route(RequestPredicates.path("/api/v1/user/**"), HandlerFunctions.http())
                                 .before(jwtAuthFilter.validateToken(PUBLIC_URLS))
                                 .onError(AuthenticationException.class,
                                         (error, request) -> ServerResponse.badRequest().body(error.getMessage()))

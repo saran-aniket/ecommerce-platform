@@ -34,7 +34,6 @@ public class SellerUserProfileServiceImpl implements UserProfileService {
         seller.setPassword(bCryptPasswordEncoder.encode(userSignupRequestDto.getPassword()));
         seller.setActive(true);
         seller.setRegisteredOn(new java.util.Date());
-        seller.setUserRoles(applicationUser.getUserRoles());
         seller.setCompanyName(userSignupRequestDto.getCompanyName());
         return sellerRepository.save(seller);
     }

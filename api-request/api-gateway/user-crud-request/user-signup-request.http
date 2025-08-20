@@ -1,0 +1,25 @@
+### POST request endpoint to register user based on role type
+POST http://localhost:1110/api/v1/authentication/users/register?roleType=ROLE_CUSTOMER
+Content-Type: application/json
+
+{
+  "firstName" : "Zoro",
+  "lastName" : "Roronoa",
+  "email" : "zoro@yopmail.com",
+  "password" : "passZoro",
+  "phoneNumber" : "2342342343"
+}
+###
+
+###
+POST http://localhost:1110/api/v1/authentication/users/register?roleType=ROLE_SELLER
+Content-Type: application/json
+
+{
+  "firstName" : "Luffy",
+  "lastName" : "Monkey",
+  "email" : "luffy@yopmail.com",
+  "password" : "passLuffy",
+  "phoneNumber" : "2342342343",
+  "companyName": "One Piece"
+}

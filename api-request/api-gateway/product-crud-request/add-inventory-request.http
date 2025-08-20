@@ -1,0 +1,10 @@
+### GET request to example server
+POST http://localhost:1110/api/v1/products/inventory
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NTU3MjE3MTAsImV4cCI6MjA1NTcyMTcxMCwicmVnaXN0ZXJlZE9uIjoxNzU1NzA3Nzc2OTYwLCJpc0RlbGV0ZWQiOmZhbHNlLCJ1c2VyX2lkIjoiNjBiZTFmYWItODIyOS00YzQ0LWI0MTUtMTIwOTRhMTZiMmI2IiwiZW1haWwiOiJsdWZmeUB5b3BtYWlsLmNvbSIsImZpcnN0TmFtZSI6Ikx1ZmZ5IiwicGhvbmVOdW1iZXIiOiIxMjMxMjMxMjMyIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9TRUxMRVIiXSwibGFzdE5hbWUiOiJ2MiJ9.M38wqKNy4dK0z4Mi3n4UhBGLOcu2hhviQg1cYZDZJxc
+
+{
+  "product_id": "525a3541-f752-4532-9fb6-dced445f9a0b",
+  "quantity": 10
+}
+###

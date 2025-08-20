@@ -6,11 +6,14 @@ import com.learn.usermicroservice.exceptions.UnauthorizedException;
 import com.learn.usermicroservice.factories.UserProfileFactory;
 import com.learn.usermicroservice.models.Token;
 import com.learn.usermicroservice.models.entities.ApplicationUser;
-import com.learn.usermicroservice.models.entities.UserRole;
+import com.learn.usermicroservice.models.entities.ApplicationUserRole;
+import com.learn.usermicroservice.models.enums.UserRoleType;
 import com.learn.usermicroservice.repositories.ApplicationUserRepository;
+import com.learn.usermicroservice.repositories.ApplicationUserRoleRepository;
 import com.learn.usermicroservice.services.TokenBlackListService;
 import com.learn.usermicroservice.services.UserAuthService;
 import com.learn.usermicroservice.services.UserRoleService;
+import com.learn.usermicroservice.services.UserService;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
@@ -29,29 +32,28 @@ public class UserAuthServiceImpl implements UserAuthService {
     private final TokenBlackListService tokenBlackListService;
     private final UserProfileFactory userProfileFactory;
     private final UserRoleService userRoleService;
+    private final ApplicationUserRoleRepository applicationUserRoleRepository;
+    private final UserService userService;
 
-    public UserAuthServiceImpl(JwtServiceImpl jwtService, BCryptPasswordEncoder bCryptPasswordEncoder, ApplicationUserRepository applicationUserRepository, TokenBlackListService tokenBlackListService, UserProfileFactory userProfileFactory, UserRoleService userRoleService) {
+    public UserAuthServiceImpl(JwtServiceImpl jwtService, BCryptPasswordEncoder bCryptPasswordEncoder, ApplicationUserRepository applicationUserRepository, TokenBlackListService tokenBlackListService, UserProfileFactory userProfileFactory, UserRoleService userRoleService, ApplicationUserRoleRepository applicationUserRoleRepository, UserService userService) {
         this.jwtService = jwtService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.applicationUserRepository = applicationUserRepository;
         this.tokenBlackListService = tokenBlackListService;
         this.userProfileFactory = userProfileFactory;
         this.userRoleService = userRoleService;
+        this.applicationUserRoleRepository = applicationUserRoleRepository;
+        this.userService = userService;
     }
 
     @Override
     public Token login(String email, String password, String roleType) throws InvalidCredentialException {
-        //check and assign user role type
-        userProfileFactory.setUserRoleType(roleType);
-        UserRole userRole = userRoleService.getUserRoleByName(String.valueOf(userProfileFactory.getUserRoleType()));
+        Optional<ApplicationUserRole> optionalApplicationUserRole = userService.getUserByRoleTypeAndEmail(email, UserRoleType.valueOf(roleType));
 
-        //get application user with email
-        Optional<ApplicationUser> optionalApplicationUser =
-                applicationUserRepository.findApplicationUserByEmail(email);
-        if (optionalApplicationUser.isEmpty() || !optionalApplicationUser.get().getUserRoles().contains(userRole)) {
+        if (optionalApplicationUserRole.isEmpty() || !optionalApplicationUserRole.get().getIsActive()) {
             throw new InvalidCredentialException("Invalid Credentials");
         }
-        ApplicationUser applicationUser = optionalApplicationUser.get();
+        ApplicationUser applicationUser = optionalApplicationUserRole.get().getApplicationUser();
         if (!bCryptPasswordEncoder.matches(password, applicationUser.getPassword())) {
             throw new InvalidCredentialException("Wrong Password");
         }

@@ -1,6 +1,5 @@
 package com.learn.usermicroservice.services.implementation;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learn.usermicroservice.dtos.UserSignupRequestDto;
 import com.learn.usermicroservice.dtos.UserUpdateRequestDto;
 import com.learn.usermicroservice.exceptions.DuplicateEmailException;
@@ -8,18 +7,16 @@ import com.learn.usermicroservice.exceptions.InvalidCredentialException;
 import com.learn.usermicroservice.exceptions.UserRoleDoesNotExistException;
 import com.learn.usermicroservice.factories.UserProfileFactory;
 import com.learn.usermicroservice.models.entities.ApplicationUser;
+import com.learn.usermicroservice.models.entities.ApplicationUserRole;
 import com.learn.usermicroservice.models.entities.UserRole;
 import com.learn.usermicroservice.models.enums.UserRoleType;
 import com.learn.usermicroservice.repositories.ApplicationUserRepository;
-import com.learn.usermicroservice.repositories.CustomerRepository;
-import com.learn.usermicroservice.repositories.UserRoleRepository;
+import com.learn.usermicroservice.repositories.ApplicationUserRoleRepository;
 import com.learn.usermicroservice.services.UserProfileService;
 import com.learn.usermicroservice.services.UserRoleService;
 import com.learn.usermicroservice.utilities.USConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,33 +27,28 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class UserServiceImplTest {
-
-    @Mock
-    private CustomerRepository customerRepository;
     @Mock
     private ApplicationUserRepository applicationUserRepository;
     @Mock
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Mock
-    private UserRoleRepository userRoleRepository;
-    @Mock
-    private JwtServiceImpl jwtService;
-    @Mock
-    private TokenBlackListServiceImpl tokenBlackListService;
-    @Mock
     private UserRoleService userRoleService;
-    @Mock
-    private ObjectMapper objectMapper;
     @Mock
     private UserProfileFactory userProfileFactory;
     @Mock
     private UserProfileService userProfileService;
-    @Captor
-    private ArgumentCaptor<ApplicationUser> userCaptor;
 
+    @Mock
     private Map<String, UserProfileService> userProfileServiceMap;
 
+    @Mock
     private UserServiceImpl userService;
+
+    @Mock
+    private ApplicationUserRoleRepository applicationUserRoleRepository;
+
+    @Mock
+    private ApplicationUserRoleServiceImpl applicationUserRoleService;
 
     @BeforeEach
     void setUp() {
@@ -65,11 +57,12 @@ class UserServiceImplTest {
         userProfileServiceMap.put("defaultService", userProfileService);
 
         userService = new UserServiceImpl(
-                customerRepository,
                 applicationUserRepository,
                 userRoleService,
                 userProfileFactory,
-                userProfileServiceMap
+                userProfileServiceMap,
+                applicationUserRoleRepository,
+                applicationUserRoleService
         );
     }
 
@@ -82,10 +75,15 @@ class UserServiceImplTest {
         signupDto.setLastName("Doe");
         signupDto.setPhoneNumber("1234567890");
         UserRole userRole = new UserRole();
-        userRole.setName(UserRoleType.ROLE_CUSTOMER.name());
+        userRole.setUserRoleType(UserRoleType.ROLE_CUSTOMER);
         ApplicationUser user = new ApplicationUser();
-        user.setUserRoles(Collections.singletonList(userRole));
 
+        ApplicationUserRole applicationUserRole = new ApplicationUserRole();
+        applicationUserRole.setApplicationUser(user);
+        applicationUserRole.setUserRole(userRole);
+        applicationUserRole.setIsActive(true);
+
+        when(applicationUserRoleService.saveApplicationUserRole(any(ApplicationUser.class), any(UserRole.class), anyBoolean())).thenReturn(applicationUserRole);
         when(applicationUserRepository.findApplicationUserByEmail(signupDto.getEmail())).thenReturn(Optional.empty());
         when(userProfileFactory.getUserProfileServiceBeanName()).thenReturn("defaultService");
         when(userProfileFactory.getConvertedUserSignupRequestDto(signupDto)).thenReturn(signupDto);
@@ -106,18 +104,23 @@ class UserServiceImplTest {
         signupDto.setEmail("test@example.com");
 
         UserRole userRole = new UserRole();
-        userRole.setName(UserRoleType.ROLE_CUSTOMER.name());
-        List<UserRole> roles = new ArrayList<>();
-        roles.add(userRole);
+        userRole.setUserRoleType(UserRoleType.ROLE_CUSTOMER);
 
         ApplicationUser existingUser = new ApplicationUser();
-        existingUser.setUserRoles(roles);
+
+        ApplicationUserRole applicationUserRole = new ApplicationUserRole();
+        applicationUserRole.setApplicationUser(existingUser);
+        applicationUserRole.setUserRole(userRole);
+        applicationUserRole.setIsActive(true);
+
+        existingUser.getApplicationUserRoles().add(applicationUserRole);
 
         when(applicationUserRepository.findApplicationUserByEmail(signupDto.getEmail()))
                 .thenReturn(Optional.of(existingUser));
         when(userProfileFactory.getUserProfileServiceBeanName()).thenReturn("defaultService");
-        when(userRoleService.getUserRoleByName(anyString())).thenReturn(userRole);
+        when(userRoleService.getUserRoleByName(anyString())).thenReturn(Optional.of(userRole));
         when(userProfileFactory.getUserRoleType()).thenReturn(UserRoleType.ROLE_CUSTOMER);
+        when(applicationUserRoleRepository.findApplicationUserRolesByApplicationUserAndUserRole(any(ApplicationUser.class), any(UserRole.class))).thenReturn(Optional.of(applicationUserRole));
 
         assertThrows(DuplicateEmailException.class,
                 () -> userService.createUser(signupDto, USConstants.CUSTOMER_ROLE));
@@ -134,9 +137,17 @@ class UserServiceImplTest {
         ApplicationUser user = new ApplicationUser();
         user.setEmail("test@example.com");
 
-        when(userRoleService.getUserRoleByName(USConstants.CUSTOMER_ROLE)).thenReturn(new UserRole());
-        when(applicationUserRepository.findApplicationUserByEmailAndUserRoles(eq("test@example.com"), anyList()))
-                .thenReturn(Optional.of(user));
+        UserRole userRole = new UserRole();
+        userRole.setUserRoleType(UserRoleType.ROLE_CUSTOMER);
+
+        ApplicationUserRole applicationUserRole = new ApplicationUserRole();
+        applicationUserRole.setApplicationUser(user);
+        applicationUserRole.setUserRole(userRole);
+        applicationUserRole.setIsActive(true);
+
+        when(applicationUserRepository.findApplicationUserByEmail(anyString())).thenReturn(Optional.of(user));
+        when(applicationUserRoleRepository.findApplicationUserRolesByApplicationUserAndUserRole(any(ApplicationUser.class), any(UserRole.class))).thenReturn(Optional.of(applicationUserRole));
+        when(userRoleService.getUserRoleByName(anyString())).thenReturn(Optional.of(userRole));
         when(userProfileFactory.getUserProfileServiceBeanName()).thenReturn("defaultService");
         when(userProfileFactory.getConvertedUserUpdateRequestDto(updateDto)).thenReturn(updateDto);
         when(userProfileService.updateUserProfile(any(UserUpdateRequestDto.class), any(ApplicationUser.class))).thenReturn(user);
@@ -155,14 +166,26 @@ class UserServiceImplTest {
         user.setEmail(email);
         user.setActive(true);
 
-        when(userRoleService.getUserRoleByName(USConstants.CUSTOMER_ROLE)).thenReturn(new UserRole());
-        when(applicationUserRepository.findApplicationUserByEmailAndUserRoles(eq(email), anyList()))
-                .thenReturn(Optional.of(user));
+        UserRole userRole = new UserRole();
+        userRole.setUserRoleType(UserRoleType.ROLE_CUSTOMER);
+
+        ApplicationUserRole applicationUserRole = new ApplicationUserRole();
+        applicationUserRole.setApplicationUser(user);
+        applicationUserRole.setUserRole(userRole);
+        applicationUserRole.setIsActive(true);
+
+        ApplicationUserRole updatedApplicationUserRole = new ApplicationUserRole();
+        updatedApplicationUserRole.setIsActive(false);
+
+        when(applicationUserRepository.findApplicationUserByEmail(anyString())).thenReturn(Optional.of(user));
+        when(applicationUserRoleRepository.findApplicationUserRolesByApplicationUserAndUserRole(any(ApplicationUser.class), any(UserRole.class))).thenReturn(Optional.of(applicationUserRole));
+        when(userRoleService.getUserRoleByName(USConstants.CUSTOMER_ROLE)).thenReturn(Optional.of(userRole));
+        when(applicationUserRoleRepository.save(any(ApplicationUserRole.class))).thenReturn(updatedApplicationUserRole);
 
         userService.deleteUser(email, roleType);
 
-        assertFalse(user.isActive());
-        verify(applicationUserRepository).save(user);
+        assertFalse(applicationUserRole.getIsActive());
+        verify(applicationUserRoleRepository).save(applicationUserRole);
     }
 
     @Test
@@ -185,10 +208,13 @@ class UserServiceImplTest {
     }
 
     @Test
-    void getAllUsers_returnsActiveUsers() {
-        List<ApplicationUser> users = Arrays.asList(new ApplicationUser(), new ApplicationUser());
-        when(applicationUserRepository.findAllByIsActiveTrue()).thenReturn(users);
-        List<ApplicationUser> result = userService.getAllUsers();
+    void getAllActiveUsersByRoleType_returnsActiveUsers() {
+        List<ApplicationUser> users = Arrays.asList(new ApplicationUser(),
+                new ApplicationUser());
+
+        when(userProfileFactory.getUserRoleType()).thenReturn(UserRoleType.ROLE_CUSTOMER);
+        when(applicationUserRoleService.getAllApplicationUsersByRoleType(any(UserRoleType.class))).thenReturn(users);
+        List<ApplicationUser> result = userService.getAllActiveUsersByRoleType(USConstants.CUSTOMER_ROLE);
         assertEquals(2, result.size());
     }
 }

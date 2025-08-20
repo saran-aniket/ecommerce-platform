@@ -1,0 +1,10 @@
+### DELETE request to soft delete user profile
+DELETE http://localhost:1110/api/v1/user/profile?roleType=ROLE_CUSTOMER
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NTU3MDg5NDIsImV4cCI6MjA1NTcwODk0MiwicmVnaXN0ZXJlZE9uIjoxNzU1NzA3NDA4OTE3LCJhdXRob3JpdGllcyI6WyJST0xFX0NVU1RPTUVSIl0sImZpcnN0TmFtZSI6Ilpvcm8iLCJlbWFpbCI6Inpvcm9AeW9wbWFpbC5jb20iLCJpc0RlbGV0ZWQiOmZhbHNlLCJsYXN0TmFtZSI6IlJvcm9ub2EiLCJwaG9uZU51bWJlciI6IjIzNDIzNDIzNDMifQ.TP-PiP26Z4XT-n82cZxr3VESf6-MZAw-0nGU0WZ-Tfo
+
+{
+  "email": "zoro@yopmail.com"
+}
+
+###

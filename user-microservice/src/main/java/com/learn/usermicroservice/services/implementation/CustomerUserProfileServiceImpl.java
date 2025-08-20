@@ -34,7 +34,6 @@ public class CustomerUserProfileServiceImpl implements UserProfileService {
         customer.setPassword(bCryptPasswordEncoder.encode(userSignupRequestDto.getPassword()));
         customer.setActive(true);
         customer.setRegisteredOn(new java.util.Date());
-        customer.setUserRoles(applicationUser.getUserRoles());
         return customerRepository.save(customer);
     }
 

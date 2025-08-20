@@ -108,4 +108,11 @@ public class GlobalExceptionHandler extends Exception {
                 ResponseStatus.FAILURE, exception.getMessage(), null
         ));
     }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<GenericResponseDto<Void>> handleUserNotFoundException(UserNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(GenericResponseDto.GenericResponseDtoFrom(
+                ResponseStatus.FAILURE, exception.getMessage(), null
+        ));
+    }
 }

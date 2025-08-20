@@ -1,7 +1,8 @@
-package com.learn.productservice.exceptions;
+package com.learn.productservice.exceptions.handler;
 
 import com.learn.productservice.dtos.GenericResponseDto;
 import com.learn.productservice.dtos.ResponseStatus;
+import com.learn.productservice.exceptions.*;
 import io.jsonwebtoken.JwtException;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.ResponseEntity;

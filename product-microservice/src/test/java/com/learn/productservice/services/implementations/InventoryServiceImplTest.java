@@ -9,11 +9,15 @@ import com.learn.productservice.entities.Inventory;
 import com.learn.productservice.entities.Product;
 import com.learn.productservice.repositories.InventoryRepository;
 import com.learn.productservice.services.ProductService;
+import com.learn.productservice.services.utilities.ProductServiceUtility;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
 
 import java.util.UUID;
 
@@ -30,10 +34,15 @@ class InventoryServiceImplTest {
     private UserServiceClient userServiceClient;
     @InjectMocks
     private InventoryServiceImpl inventoryService;
+    @Mock
+    private ProductServiceUtility productServiceUtility;
+    @Mock
+    private SecurityContextHolder securityContextHolder;
 
     @Test
     void testCreateInventory() {
-        UUID productId = UUID.randomUUID();
+        Authentication authentication = mock(Authentication.class);
+        SecurityContextHolder.setContext(new SecurityContextImpl(authentication));
         UUID sellerId = UUID.randomUUID();
         Product product = new Product();
 
@@ -47,8 +56,10 @@ class InventoryServiceImplTest {
         GenericResponseDto<GetUserResponseDto> userResponseDtoGenericResponseDto =
                 GenericResponseDto.GenericResponseDtoFrom(ResponseStatus.SUCCESS, "", new GetUserResponseDto());
 
+        when(authentication.getPrincipal()).thenReturn("valid.jwt.token");
+        when(productServiceUtility.getUserIdFromToken(anyString())).thenReturn(String.valueOf(sellerId));
         when(inventoryRepository.save(any())).thenReturn(inventory);
-        when(userServiceClient.getUserProfileById(anyString(), anyString())).thenReturn(userResponseDtoGenericResponseDto);
+        when(userServiceClient.getUserProfileById(anyString(), anyString(), anyString())).thenReturn(userResponseDtoGenericResponseDto);
 
         inventoryService.createInventory(requestDto);
 

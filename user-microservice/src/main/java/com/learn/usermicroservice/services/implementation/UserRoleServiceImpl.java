@@ -1,7 +1,7 @@
 package com.learn.usermicroservice.services.implementation;
 
-import com.learn.usermicroservice.exceptions.UserRoleDoesNotExistException;
 import com.learn.usermicroservice.models.entities.UserRole;
+import com.learn.usermicroservice.models.enums.UserRoleType;
 import com.learn.usermicroservice.repositories.UserRoleRepository;
 import com.learn.usermicroservice.services.UserRoleService;
 import org.springframework.stereotype.Service;
@@ -23,11 +23,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
-    public UserRole getUserRoleByName(String name) {
-        Optional<UserRole> userRole = userRoleRepository.findUserRoleByName(name);
-        if (userRole.isEmpty()) {
-            throw new UserRoleDoesNotExistException("User role not found for name " + name);
-        }
-        return userRole.get();
+    public Optional<UserRole> getUserRoleByName(String name) {
+        return userRoleRepository.findUserRoleByUserRoleType(UserRoleType.valueOf(name));
     }
 }

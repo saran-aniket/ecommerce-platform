@@ -1,0 +1,6 @@
+### Get all products
+GET http://localhost:1110/api/v1/products
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NTU3MTY0NTgsImV4cCI6MjA1NTcxNjQ1OCwicmVnaXN0ZXJlZE9uIjoxNzU1NzA3Nzc2OTYwLCJhdXRob3JpdGllcyI6WyJST0xFX1NFTExFUiJdLCJmaXJzdE5hbWUiOiJMdWZmeSIsImVtYWlsIjoibHVmZnlAeW9wbWFpbC5jb20iLCJpc0RlbGV0ZWQiOmZhbHNlLCJsYXN0TmFtZSI6Ik1vbmtleSIsInBob25lTnVtYmVyIjoiMjM0MjM0MjM0MyJ9.se7t9aJJWF7ZVgy8He8vmqjHApB83EQ6Ih3FJsEwjtA
+
+###

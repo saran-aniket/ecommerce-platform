@@ -3,7 +3,7 @@ package com.learn.usermicroservice.utility;
 import com.learn.usermicroservice.models.entities.ApplicationUser;
 import com.learn.usermicroservice.models.entities.Customer;
 import com.learn.usermicroservice.models.entities.UserRole;
-import com.learn.usermicroservice.utilities.USConstants;
+import com.learn.usermicroservice.models.enums.UserRoleType;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,7 +15,6 @@ public class TestDataSetup {
         ApplicationUser applicationUser = new ApplicationUser();
         applicationUser.setEmail("testEmail.com");
         applicationUser.setPassword("password");
-        applicationUser.setUserRoles(getCustomerUserRole());
         applicationUser.setRegisteredOn(new Date());
         return applicationUser;
 
@@ -38,7 +37,7 @@ public class TestDataSetup {
     public static List<UserRole> getCustomerUserRole() {
         List<UserRole> userRoleList = new ArrayList<>();
         UserRole userRole = new UserRole();
-        userRole.setName(USConstants.CUSTOMER_ROLE);
+        userRole.setUserRoleType(UserRoleType.ROLE_CUSTOMER);
         userRoleList.add(userRole);
         return userRoleList;
     }

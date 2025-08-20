@@ -20,7 +20,7 @@ public interface UserServiceClient {
     @PostMapping("/auth/logout")
     GenericResponseDto<Void> logout(@RequestHeader("Authorization") String authHeader);
 
-    @PostMapping("/auth/validate-toke")
+    @PostMapping("/auth/validate-token")
     GenericResponseDto<Void> validateToken(@RequestHeader("Authorization") String authHeader);
 
     @GetMapping("/auth")

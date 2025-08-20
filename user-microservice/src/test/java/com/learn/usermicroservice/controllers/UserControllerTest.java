@@ -18,6 +18,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.UUID;
+
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
@@ -150,5 +152,19 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.status").value("SUCCESS"));
     }
 
+    @Test
+    void getUserProfileById_shouldReturnOk() throws Exception {
+        UUID uuid = UUID.randomUUID();
+        String roleType = "ROLE_CUSTOMER";
+        ApplicationUser applicationUser = new ApplicationUser();
+
+        when(userService.getUserByIdAndRoleType(String.valueOf(uuid), roleType)).thenReturn(applicationUser);
+
+        mockMvc.perform(get("/api/v1/user/profile")
+                        .param("roleType", roleType)
+                        .param("userId", String.valueOf(uuid)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("SUCCESS"));
+    }
 
 }

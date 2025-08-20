@@ -5,7 +5,6 @@ import com.learn.usermicroservice.dtos.UserUpdateRequestDto;
 import com.learn.usermicroservice.exceptions.CustomerNotFoundException;
 import com.learn.usermicroservice.models.entities.ApplicationUser;
 import com.learn.usermicroservice.models.entities.Customer;
-import com.learn.usermicroservice.models.entities.UserRole;
 import com.learn.usermicroservice.repositories.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,7 +44,6 @@ class CustomerUserProfileServiceImplTest {
         signupDto.setPassword("password");
 
         ApplicationUser user = new ApplicationUser();
-        user.setUserRoles(List.of(new UserRole()));
 
         Customer savedCustomer = new Customer();
         when(bCryptPasswordEncoder.encode(anyString())).thenReturn("encodedPassword");

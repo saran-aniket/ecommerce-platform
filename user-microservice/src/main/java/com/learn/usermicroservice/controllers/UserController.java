@@ -31,7 +31,7 @@ public class UserController {
 
     @PostMapping("/auth/signup")
     @Hidden
-    public ResponseEntity<GenericResponseDto<UserDto>> signUp(@RequestParam("roleType") String roleType,
+    public ResponseEntity<GenericResponseDto<UserDto>> signUp(@RequestParam(name = "roleType") String roleType,
                                                               @RequestBody UserSignupRequestDto userSignupRequestDto) {
         log.info("User Service | signup");
         ApplicationUser applicationUser = userService.createUser(userSignupRequestDto, roleType);

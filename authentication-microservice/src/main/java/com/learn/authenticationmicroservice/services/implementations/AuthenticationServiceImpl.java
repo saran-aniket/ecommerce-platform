@@ -50,15 +50,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return userServiceClient.login(roleType, userLoginRequestDto);
     }
 
-//    @Override
-//    public GenericResponseDto<Void> validateToken(String authHeader) {
-//        return userServiceClient.validateToken(authHeader);
-//    }
-
     @Override
     public GenericResponseDto<AuthenticationDto> getAuthentication(String authHeader) {
         log.info("Authenticating user with token");
         log.info("***** getAuthentication: authHeader: {}", authHeader);
         return userServiceClient.getAuthentication(authHeader);
+    }
+
+    @Override
+    public void logout(String authHeader) {
+        userServiceClient.logout(authHeader);
     }
 }

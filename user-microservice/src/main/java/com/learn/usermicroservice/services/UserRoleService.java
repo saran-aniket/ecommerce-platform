@@ -2,8 +2,10 @@ package com.learn.usermicroservice.services;
 
 import com.learn.usermicroservice.models.entities.UserRole;
 
+import java.util.Optional;
+
 public interface UserRoleService {
     UserRole createUserRole(UserRole userRole);
 
-    UserRole getUserRoleByName(String name);
+    Optional<UserRole> getUserRoleByName(String name);
 }

@@ -9,6 +9,5 @@ import java.util.UUID;
 @Setter
 public class InventoryRequestDto {
     private UUID product_id;
-    private UUID seller_id;
     private int quantity;
 }

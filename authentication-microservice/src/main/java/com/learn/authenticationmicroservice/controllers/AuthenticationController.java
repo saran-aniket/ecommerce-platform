@@ -1,6 +1,7 @@
 package com.learn.authenticationmicroservice.controllers;
 
 import com.learn.authenticationmicroservice.dtos.*;
+import com.learn.authenticationmicroservice.dtos.ResponseStatus;
 import com.learn.authenticationmicroservice.services.AuthenticationService;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,13 @@ public class AuthenticationController {
         log.info("***** authenticate: authHeader: {}", authHeader);
         log.info("Authenticating user with token");
         return ResponseEntity.status(HttpStatus.OK).body(authenticationService.getAuthentication(authHeader));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<GenericResponseDto<Void>> logout(@RequestHeader("Authorization") String authHeader) {
+        authenticationService.logout(authHeader);
+        return ResponseEntity.ok().body(GenericResponseDto.GenericResponseDtoFrom(ResponseStatus.SUCCESS, "Logout " +
+                "Successful", null));
     }
 
 }

@@ -1,9 +1,8 @@
 package com.learn.usermicroservice.services.implementation;
 
-import com.learn.usermicroservice.exceptions.UserRoleDoesNotExistException;
 import com.learn.usermicroservice.models.entities.UserRole;
+import com.learn.usermicroservice.models.enums.UserRoleType;
 import com.learn.usermicroservice.repositories.UserRoleRepository;
-import com.learn.usermicroservice.utilities.USConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -42,27 +41,25 @@ class UserRoleServiceImplTest {
 
     @Test
     void getUserRoleByName_shouldReturnUserRoleIfPresent() {
-        String name = USConstants.ADMIN_ROLE;
+        String name = "ROLE_ADMIN";
         UserRole userRole = new UserRole();
-        userRole.setName(name);
+        userRole.setUserRoleType(UserRoleType.ROLE_ADMIN);
 
-        when(userRoleRepository.findUserRoleByName(name)).thenReturn(Optional.of(userRole));
+        when(userRoleRepository.findUserRoleByUserRoleType(UserRoleType.ROLE_ADMIN)).thenReturn(Optional.of(userRole));
 
-        UserRole result = userRoleService.getUserRoleByName(name);
+        Optional<UserRole> result = userRoleService.getUserRoleByName(name);
 
-        assertNotNull(result);
-        assertEquals(name, result.getName());
-        verify(userRoleRepository, times(1)).findUserRoleByName(name);
+        assertTrue(result.isPresent());
+        assertEquals(name, result.get().getUserRoleType().name());
+        verify(userRoleRepository, times(1)).findUserRoleByUserRoleType(UserRoleType.ROLE_ADMIN);
     }
 
     @Test
     void getUserRoleByName_shouldThrowExceptionIfNotFound() {
         String name = "NOTFOUND";
-        when(userRoleRepository.findUserRoleByName(name)).thenReturn(Optional.empty());
+        when(userRoleRepository.findUserRoleByUserRoleType(any(UserRoleType.class))).thenReturn(Optional.empty());
 
-        assertThrows(UserRoleDoesNotExistException.class, () -> {
-            userRoleService.getUserRoleByName(name);
-        });
-        verify(userRoleRepository, times(1)).findUserRoleByName(name);
+        assertTrue(userRoleService.getUserRoleByName(UserRoleType.ROLE_ADMIN.name()).isEmpty());
+        verify(userRoleRepository, times(1)).findUserRoleByUserRoleType(UserRoleType.ROLE_ADMIN);
     }
 }

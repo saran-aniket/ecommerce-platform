@@ -5,7 +5,6 @@ import com.learn.usermicroservice.dtos.UserUpdateRequestDto;
 import com.learn.usermicroservice.exceptions.SellerNotFoundException;
 import com.learn.usermicroservice.models.entities.ApplicationUser;
 import com.learn.usermicroservice.models.entities.Seller;
-import com.learn.usermicroservice.models.entities.UserRole;
 import com.learn.usermicroservice.repositories.SellerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,7 +45,6 @@ class SellerUserProfileServiceImplTest {
         signupDto.setCompanyName("WonderCorp");
 
         ApplicationUser user = new ApplicationUser();
-        user.setUserRoles(List.of(new UserRole()));
 
         Seller savedSeller = new Seller();
         when(bCryptPasswordEncoder.encode(anyString())).thenReturn("hashedPwd");
