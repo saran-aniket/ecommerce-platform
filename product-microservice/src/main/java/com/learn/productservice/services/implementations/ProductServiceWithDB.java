@@ -1,6 +1,6 @@
 package com.learn.productservice.services.implementations;
 
-import com.learn.productservice.dtos.ProductRequestDto;
+import com.learn.productservice.dtos.*;
 import com.learn.productservice.exceptions.DuplicateProductFoundException;
 import com.learn.productservice.exceptions.ProductNotFoundException;
 import com.learn.productservice.mapper.ProductMapper;
@@ -14,9 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service(value = "productServiceWithDb")
 public class ProductServiceWithDB implements ProductService {

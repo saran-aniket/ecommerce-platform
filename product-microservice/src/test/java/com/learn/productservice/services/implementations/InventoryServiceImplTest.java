@@ -8,8 +8,8 @@ import com.learn.productservice.dtos.ResponseStatus;
 import com.learn.productservice.entities.Inventory;
 import com.learn.productservice.entities.Product;
 import com.learn.productservice.repositories.InventoryRepository;
+import com.learn.productservice.services.JwtService;
 import com.learn.productservice.services.ProductService;
-import com.learn.productservice.services.utilities.ProductServiceUtility;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,7 +35,7 @@ class InventoryServiceImplTest {
     @InjectMocks
     private InventoryServiceImpl inventoryService;
     @Mock
-    private ProductServiceUtility productServiceUtility;
+    private JwtService jwtService;
     @Mock
     private SecurityContextHolder securityContextHolder;
 
@@ -57,7 +57,7 @@ class InventoryServiceImplTest {
                 GenericResponseDto.GenericResponseDtoFrom(ResponseStatus.SUCCESS, "", new GetUserResponseDto());
 
         when(authentication.getPrincipal()).thenReturn("valid.jwt.token");
-        when(productServiceUtility.getUserIdFromToken(anyString())).thenReturn(String.valueOf(sellerId));
+        when(jwtService.getUserIdFromToken(anyString())).thenReturn(String.valueOf(sellerId));
         when(inventoryRepository.save(any())).thenReturn(inventory);
         when(userServiceClient.getUserProfileById(anyString(), anyString(), anyString())).thenReturn(userResponseDtoGenericResponseDto);
 

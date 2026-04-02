@@ -8,4 +8,6 @@ public interface JwtService {
     Claims extractAllClaims(String token);
 
     UsernamePasswordAuthenticationToken getAuthentication(String token);
+
+    String getUserIdFromToken(String token);
 }

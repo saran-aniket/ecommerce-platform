@@ -55,4 +55,9 @@ public class JwtServiceImpl implements JwtService {
         }
         return new UsernamePasswordAuthenticationToken(token, null, authorities);
     }
+
+    public String getUserIdFromToken(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.get("user_id", String.class);
+    }
 }

@@ -5,6 +5,7 @@ import com.learn.productservice.dtos.ResponseStatus;
 import com.learn.productservice.mapper.ProductMapper;
 import com.learn.productservice.services.InventoryService;
 import com.learn.productservice.services.ProductService;
+import com.learn.productservice.services.utilities.ProductServiceFacade;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -21,10 +22,12 @@ import java.util.UUID;
 public class ProductController {
     private final ProductService productService;
     private final InventoryService inventoryService;
+    private final ProductServiceFacade productServiceUtility;
 
-    public ProductController(@Qualifier("productServiceWithDb") ProductService productService, InventoryService inventoryService) {
+    public ProductController(@Qualifier("productServiceWithDb") ProductService productService, InventoryService inventoryService, ProductServiceFacade productServiceUtility) {
         this.productService = productService;
         this.inventoryService = inventoryService;
+        this.productServiceUtility = productServiceUtility;
     }
 
     @PostMapping
@@ -58,5 +61,14 @@ public class ProductController {
         inventoryService.createInventory(inventoryRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(GenericResponseDto.GenericResponseDtoFrom(ResponseStatus.SUCCESS, "",
                 null));
+    }
+
+    @GetMapping("/{id}/details")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SELLER')")
+    public ResponseEntity<GenericResponseDto<ProductDetailsResponseDto>> getProductDetails(@PathVariable("id") String id) {
+        log.info("Received request to get product details {}", id);
+        ProductDetailsResponseDto productDetailsResponseDto = productServiceUtility.getProductDetailsById(UUID.fromString(id));
+        return ResponseEntity.status(HttpStatus.FOUND).body(GenericResponseDto.GenericResponseDtoFrom(ResponseStatus.SUCCESS, "",
+                productDetailsResponseDto));
     }
 }
