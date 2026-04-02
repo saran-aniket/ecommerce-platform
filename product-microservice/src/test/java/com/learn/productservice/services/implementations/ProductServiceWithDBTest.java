@@ -6,8 +6,8 @@ import com.learn.productservice.exceptions.ProductNotFoundException;
 import com.learn.productservice.mapper.ProductMapper;
 import com.learn.productservice.entities.Category;
 import com.learn.productservice.entities.Product;
-import com.learn.productservice.repositories.CategoryRepository;
 import com.learn.productservice.repositories.ProductRepository;
+import com.learn.productservice.services.CategoryService;
 import com.learn.productservice.services.InventoryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +33,7 @@ class ProductServiceWithDBTest {
     @Mock
     private ProductRepository productRepository;
     @Mock
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
     @Mock
     private RedisTemplate<String, Object> redisTemplate;
     @Mock
@@ -55,17 +55,17 @@ class ProductServiceWithDBTest {
         // Mock mapping and repo interaction
         try (MockedStatic<ProductMapper> mapperMockedStatic = mockStatic(ProductMapper.class)) {
             mapperMockedStatic.when(() -> ProductMapper.toProduct(requestDto)).thenReturn(product);
-            when(categoryRepository.findByNameIgnoreCase("Category1")).thenReturn(Optional.empty());
+            when(categoryService.getCategoryByName("Category1")).thenReturn(Optional.empty());
 
             Category category = new Category();
             category.setName("Category1");
-            when(categoryRepository.save(any(Category.class))).thenReturn(category);
+            when(categoryService.createCategory(any(String.class))).thenReturn(category);
             when(productRepository.save(product)).thenReturn(product);
 
             Product created = productServiceWithDB.saveProduct(requestDto);
 
             assertNotNull(created);
-            verify(categoryRepository).save(any(Category.class));
+            verify(categoryService).createCategory(any(String.class));
             verify(productRepository).save(product);
         }
     }
@@ -79,14 +79,15 @@ class ProductServiceWithDBTest {
         Product product = mock(Product.class);
         when(product.getName()).thenReturn("ExistProduct");
 
+
         try (MockedStatic<ProductMapper> mapperMockedStatic = mockStatic(ProductMapper.class)) {
             mapperMockedStatic.when(() -> ProductMapper.toProduct(requestDto)).thenReturn(product);
 
             Category category = new Category();
             category.setName("ExistCat");
-            when(categoryRepository.findByNameIgnoreCase("ExistCat")).thenReturn(Optional.of(category));
+            when(categoryService.getCategoryByName("ExistCat")).thenReturn(Optional.of(category));
             when(productRepository.getProductByNameAndCategory_Name("ExistProduct", "ExistCat"))
-                    .thenReturn(Optional.of(new Product()));
+                    .thenReturn(Optional.of(product));
 
             assertThrows(DuplicateProductFoundException.class, () -> productServiceWithDB.saveProduct(requestDto));
         }

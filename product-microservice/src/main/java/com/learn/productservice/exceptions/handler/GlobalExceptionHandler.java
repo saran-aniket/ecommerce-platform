@@ -50,4 +50,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(GenericResponseDto.GenericResponseDtoFrom(ResponseStatus.FAILURE,
                 ex.getMessage(), null));
     }
+
+    @ExceptionHandler(DuplicateCategoryFoundException.class)
+    public ResponseEntity<GenericResponseDto<Void>> duplicateCategoryFoundException(DuplicateCategoryFoundException ex) {
+        return ResponseEntity.badRequest().body(GenericResponseDto.GenericResponseDtoFrom(ResponseStatus.FAILURE,
+                ex.getMessage(), null));
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<GenericResponseDto<Void>> categoryNotFoundException(CategoryNotFoundException ex) {
+        return ResponseEntity.badRequest().body(GenericResponseDto.GenericResponseDtoFrom(ResponseStatus.FAILURE,
+                ex.getMessage(), null));
+    }
 }

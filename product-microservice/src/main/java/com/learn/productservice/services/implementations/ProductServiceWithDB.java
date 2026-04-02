@@ -6,8 +6,8 @@ import com.learn.productservice.exceptions.ProductNotFoundException;
 import com.learn.productservice.mapper.ProductMapper;
 import com.learn.productservice.entities.Category;
 import com.learn.productservice.entities.Product;
-import com.learn.productservice.repositories.CategoryRepository;
 import com.learn.productservice.repositories.ProductRepository;
+import com.learn.productservice.services.CategoryService;
 import com.learn.productservice.services.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,31 +22,24 @@ import java.util.UUID;
 public class ProductServiceWithDB implements ProductService {
     private static final Logger log = LoggerFactory.getLogger(ProductServiceWithDB.class);
     private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public ProductServiceWithDB(ProductRepository productRepository, CategoryRepository categoryRepository,
+    public ProductServiceWithDB(ProductRepository productRepository, CategoryService categoryService,
                                 RedisTemplate<String, Object> redisTemplate) {
         this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
+        this.categoryService = categoryService;
         this.redisTemplate = redisTemplate;
     }
 
     public Product saveProduct(ProductRequestDto productRequestDto) {
         log.info("Creating product");
         Product product = ProductMapper.toProduct(productRequestDto);
-        Optional<Category> getCategory = categoryRepository.findByNameIgnoreCase(productRequestDto.getCategory_name());
-        Category category;
-        if (getCategory.isEmpty()) {
-            category = new Category();
-            category.setName(productRequestDto.getCategory_name());
-            categoryRepository.save(category);
-        } else {
-            category = getCategory.get();
-            Optional<Product> optionalProduct = productRepository.getProductByNameAndCategory_Name(product.getName(), category.getName());
-            if (optionalProduct.isPresent()) {
-                throw new DuplicateProductFoundException("Product already exists in this category");
-            }
+        Optional<Category> getCategory = categoryService.getCategoryByName(productRequestDto.getCategory_name());
+        Category category = getCategory.orElseGet(() -> categoryService.createCategory(productRequestDto.getCategory_name()));
+        Optional<Product> optionalProduct = productRepository.getProductByNameAndCategory_Name(product.getName(), category.getName());
+        if (optionalProduct.isPresent()) {
+            throw new DuplicateProductFoundException("Product already exists in this category");
         }
         product.setCategory(category);
         Product createdProduct = productRepository.save(product);
